@@ -1,6 +1,6 @@
 package uz.luka.libro.presantation.screens.intro
 
-import uz.luka.libro.presantation.screens.singin.SignInScreen
+import uz.luka.libro.presantation.screens.login.LoginScreen
 import uz.luka.libro.utils.navigator.AppNavigator
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -14,7 +14,7 @@ class IntroDirectionImpl @Inject constructor(
     private val appNavigator: AppNavigator
 ) : IntroDirection {
     override suspend fun moveToSignScreen() {
-        appNavigator.replace(SignInScreen())
+        appNavigator.replace(LoginScreen())
     }
 
 }

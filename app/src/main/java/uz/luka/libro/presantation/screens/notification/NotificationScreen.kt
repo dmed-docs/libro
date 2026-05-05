@@ -12,10 +12,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.material3.MaterialTheme
 import cafe.adriel.voyager.core.screen.Screen
 import uz.luka.libro.R
 import uz.luka.libro.presantation.components.app.TextUi
 import uz.luka.libro.presantation.components.notification.NotificationMainItem
+import uz.luka.libro.ui.theme.dimens
 
 class NotificationScreen : Screen {
     @Composable
@@ -30,11 +32,11 @@ fun NotificationScreenContent() {
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
-            .padding(16.dp)
+            .padding(MaterialTheme.dimens.paddingMedium)
     ){
         TextUi(text = "Notification")
 
-        Spacer(modifier = Modifier.size(8.dp))
+        Spacer(modifier = Modifier.size(MaterialTheme.dimens.spacingSmall))
 
         LazyColumn {
             item {
@@ -45,7 +47,7 @@ fun NotificationScreenContent() {
                         "See your new followers here."
                     )
                 )
-                Spacer(modifier = Modifier.size(4.dp))
+                Spacer(modifier = Modifier.size(MaterialTheme.dimens.spacingTiny))
                 NotificationMainItem(
                     icon = R.drawable.ic_time ,
                     texts = listOf(

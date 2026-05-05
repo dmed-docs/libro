@@ -24,17 +24,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
+import androidx.compose.material3.MaterialTheme
 import cafe.adriel.voyager.hilt.getViewModel
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.launch
 import uz.luka.libro.presantation.components.app.ButtonUi
 import uz.luka.libro.presantation.components.intro.IndicatorUi
 import uz.luka.libro.presantation.components.intro.IntroTopUi
+import uz.luka.libro.ui.theme.dimens
 
 class IntroScreen : Screen {
     @Composable
     override fun Content() {
         val viewModel = getViewModel<IntroViewModel>()
+
         IntroScreenContent(
             viewModel.uiState.collectAsState().value ,
             viewModel::onEventDispatchers
@@ -48,12 +50,6 @@ fun IntroScreenContent(
     uiState : IntroContract.UiState = IntroContract.UiState(),
     onEventDispatchers : (IntroContract.Intent) -> Unit = {}
 ) {
-    val uiController = rememberSystemUiController()
-
-    uiController.setStatusBarColor(
-        color = Color.White
-    )
-
     val pagerState = rememberPagerState(initialPage = 0) {
         uiState.pages.size
     }
@@ -78,7 +74,7 @@ fun IntroScreenContent(
         Column(
             modifier = Modifier
                 .align(Alignment.TopCenter)
-                .padding(top = 100.dp)
+                .padding(top = MaterialTheme.dimens.large)
         ) {
             HorizontalPager(state = pagerState) { index ->
                 IntroTopUi(introCommon = uiState.pages[index])
@@ -91,7 +87,7 @@ fun IntroScreenContent(
             Row (
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 5.dp),
+                    .padding(horizontal = MaterialTheme.dimens.paddingMedium, vertical = MaterialTheme.dimens.paddingTiny),
                 horizontalArrangement = Arrangement.SpaceBetween ,
                 verticalAlignment = Alignment.CenterVertically
             ){
@@ -144,7 +140,7 @@ fun IntroScreenContent(
 
             }
 
-            Spacer(modifier = Modifier.size(50.dp))
+            Spacer(modifier = Modifier.size(MaterialTheme.dimens.spacingExtraLarge))
         }
     }
 

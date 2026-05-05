@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -26,6 +27,7 @@ import androidx.compose.ui.unit.sp
 import uz.luka.libro.R
 import uz.luka.libro.ui.theme.DarkGray
 import uz.luka.libro.ui.theme.LightGray
+import uz.luka.libro.ui.theme.dimens
 
 @Composable
 fun SearchFieldUi(
@@ -35,13 +37,13 @@ fun SearchFieldUi(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(40.dp)
+            .height(MaterialTheme.dimens.searchBarHeight)
             .shadow(
                 elevation = shadow.dp ,
-                shape = RoundedCornerShape(50)
+                shape = RoundedCornerShape(MaterialTheme.dimens.cornerRadiusFull)
             )
             .background(Color.White)
-            .padding(horizontal = 12.dp, vertical = 4.dp)
+            .padding(horizontal = MaterialTheme.dimens.paddingSmall, vertical = MaterialTheme.dimens.paddingTiny)
     ) {
         Row(
             modifier = Modifier
@@ -51,13 +53,13 @@ fun SearchFieldUi(
             // Leading Icon
             Icon(
                 modifier = Modifier
-                    .size(16.dp),
+                    .size(MaterialTheme.dimens.iconSizeSmall),
                 painter = painterResource(id = R.drawable.ic_search),
                 contentDescription = "" ,
                 tint = DarkGray
             )
 
-            Spacer(modifier = Modifier.width(10.dp))
+            Spacer(modifier = Modifier.width(MaterialTheme.dimens.spacingSmall))
 
             // BasicTextField
             BasicTextField(

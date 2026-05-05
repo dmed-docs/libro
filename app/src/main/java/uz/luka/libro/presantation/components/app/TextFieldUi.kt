@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
@@ -24,6 +25,7 @@ import androidx.compose.ui.unit.sp
 import uz.luka.libro.R
 import uz.luka.libro.ui.theme.DarkGray
 import uz.luka.libro.ui.theme.LightGray
+import uz.luka.libro.ui.theme.dimens
 
 @Composable
 fun TextFieldUi(
@@ -34,7 +36,7 @@ fun TextFieldUi(
     label : String = "Something",
     trailingIcon : Int = 0,
     leadingIcon : Int = 0 ,
-    passwordState : Boolean = false,
+    passwordState : Boolean = true,
     onClickTrailingIc : () -> Unit = {} ,
     borderColor : Color = LightGray ,
     cross : Int = 0 ,
@@ -46,7 +48,7 @@ fun TextFieldUi(
         modifier = if (isModifier) modifier else
             Modifier
                 .fillMaxWidth()
-                .height(53.dp),
+                .height(MaterialTheme.dimens.textFieldHeight),
         value = value,
         onValueChange = onChangeValue ,
         placeholder = {
@@ -69,7 +71,7 @@ fun TextFieldUi(
             focusedContainerColor = Color.White ,
             unfocusedContainerColor = Color.White
         ) ,
-        shape = RoundedCornerShape(16.dp) ,
+        shape = RoundedCornerShape(MaterialTheme.dimens.cornerRadiusMedium) ,
         isError = errorState,
         supportingText = {
             if (errorState) {
@@ -82,7 +84,7 @@ fun TextFieldUi(
         leadingIcon = {
             if (leadingIcon != 0) {
                 Icon(
-                    modifier = Modifier.size(22.dp),
+                    modifier = Modifier.size(MaterialTheme.dimens.iconSizeMedium),
                     painter = painterResource(id = leadingIcon),
                     contentDescription = "" ,
                     tint = LightGray
@@ -93,7 +95,7 @@ fun TextFieldUi(
             if (trailingIcon != 0) {
                 IconButton(onClick = onClickTrailingIc) {
                     Icon(
-                        modifier = Modifier.size(22.dp),
+                        modifier = Modifier.size(MaterialTheme.dimens.iconSizeMedium),
                         painter = painterResource(id = trailingIcon),
                         contentDescription = "" ,
                         tint = LightGray

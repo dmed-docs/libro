@@ -21,6 +21,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.material3.MaterialTheme
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.hilt.getViewModel
 import uz.luka.libro.R
@@ -29,6 +30,7 @@ import uz.luka.libro.presantation.components.sign.ButtonTextsUi
 import uz.luka.libro.presantation.components.sign.CustomBtnOrBtn
 import uz.luka.libro.presantation.components.sign.RegisterTopUi
 import uz.luka.libro.ui.theme.DarkGray
+import uz.luka.libro.ui.theme.dimens
 
 class SignInScreen : Screen {
     @Composable
@@ -55,7 +57,7 @@ fun SignInScreenContent(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
-            .padding(16.dp)
+            .padding(MaterialTheme.dimens.paddingMedium)
     ) {
         Column(
             modifier = Modifier
@@ -79,7 +81,7 @@ fun SignInScreenContent(
                 leadingIcon = R.drawable.ic_user
             )
 
-            Spacer(modifier = Modifier.size(26.dp))
+            Spacer(modifier = Modifier.size(MaterialTheme.dimens.spacingLarge))
 
             TextFieldUi(
                 value = uiState.password ,
@@ -95,7 +97,7 @@ fun SignInScreenContent(
                 label = "Password"
             )
 
-            Spacer(modifier = Modifier.size(16.dp))
+            Spacer(modifier = Modifier.size(MaterialTheme.dimens.spacingMedium))
 
             Text(
                 modifier = Modifier.fillMaxWidth(),
@@ -120,7 +122,7 @@ fun SignInScreenContent(
         ButtonTextsUi(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
-                .padding(bottom = 20.dp) ,
+                .padding(bottom = MaterialTheme.dimens.paddingLarge) ,
             firstText = "Don't have an account?",
             secondText = "Sign Up." ,
             onClickSecondBtn = {

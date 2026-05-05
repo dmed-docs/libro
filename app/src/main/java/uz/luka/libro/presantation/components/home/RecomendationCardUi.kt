@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -22,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import uz.luka.libro.R
 import uz.luka.libro.ui.theme.DarkGray
+import uz.luka.libro.ui.theme.dimens
 
 @Composable
 fun RecomendationCardUi(
@@ -33,7 +35,7 @@ fun RecomendationCardUi(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .clip(RoundedCornerShape(8.dp))
+                .clip(RoundedCornerShape(MaterialTheme.dimens.cornerRadiusSmall))
         ) {
             Image(
                 modifier = Modifier
@@ -46,7 +48,7 @@ fun RecomendationCardUi(
         Text(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(30.dp),
+                .height(MaterialTheme.dimens.recommendationCardTextHeight),
             text = "The Tipping Point" ,
             style = TextStyle(
                 color = Color(0xff1C1B1F) ,
@@ -59,7 +61,7 @@ fun RecomendationCardUi(
         Text(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(30.dp),
+                .height(MaterialTheme.dimens.recommendationCardTextHeight),
             text = "Malcolm Gladwell" ,
             style = TextStyle(
                 color = DarkGray ,

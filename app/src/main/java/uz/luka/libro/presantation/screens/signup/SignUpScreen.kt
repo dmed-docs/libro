@@ -128,7 +128,7 @@ fun SignUpScreenContent(
                 leadingIcon = R.drawable.ic_repassword
             )
 
-            Spacer(modifier = Modifier.size(16.dp))
+            Spacer(modifier = Modifier.size(MaterialTheme.dimens.spacingMedium))
 
             Text(
                 modifier = Modifier.fillMaxWidth(),
@@ -152,7 +152,7 @@ fun SignUpScreenContent(
         ButtonTextsUi(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
-                .padding(bottom = 20.dp) ,
+                .padding(bottom = MaterialTheme.dimens.paddingLarge) ,
             firstText = "Have an account?",
             secondText = "Sign In." ,
             onClickSecondBtn = {

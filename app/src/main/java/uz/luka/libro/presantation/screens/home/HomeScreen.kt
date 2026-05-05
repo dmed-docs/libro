@@ -23,12 +23,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
+import androidx.compose.material3.MaterialTheme
 import uz.luka.libro.R
 import uz.luka.libro.presantation.components.home.CategoryUi
 import uz.luka.libro.presantation.components.home.ContinueReadingUi
 import uz.luka.libro.presantation.components.home.RecomendationUi
 import uz.luka.libro.presantation.components.home.SearchFieldUi
 import uz.luka.libro.ui.theme.MainColor
+import uz.luka.libro.ui.theme.dimens
 
 class HomeScreen : Screen {
     @Composable
@@ -48,14 +50,14 @@ fun HomeScreenContent() {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(120.dp)
-                .clip(RoundedCornerShape(22.dp))
+                .height(MaterialTheme.dimens.topBarHeight)
+                .clip(RoundedCornerShape(MaterialTheme.dimens.cornerRadiusLarge))
                 .background(MainColor)
         ) {}
 
         Column (
             modifier = Modifier
-                .padding(16.dp)
+                .padding(MaterialTheme.dimens.paddingMedium)
         ){
             Text(
                 text = "Hi, Luka" ,
@@ -65,7 +67,7 @@ fun HomeScreenContent() {
                     fontSize = 20.sp
                 )
             )
-            Spacer(modifier = Modifier.size(8.dp))
+            Spacer(modifier = Modifier.size(MaterialTheme.dimens.spacingSmall))
             Text(
                 text = "Let's read a book today" ,
                 style = TextStyle(
@@ -74,28 +76,28 @@ fun HomeScreenContent() {
                     fontSize = 14.sp
                 )
             )
-            Spacer(modifier = Modifier.size(35.dp))
+            Spacer(modifier = Modifier.size(MaterialTheme.dimens.spacingExtraLarge))
 
             SearchFieldUi(
                 placeholder = "Search for book, e-library or profile"
             )
 
-            Spacer(modifier = Modifier.size(16.dp))
+            Spacer(modifier = Modifier.size(MaterialTheme.dimens.spacingMedium))
 
             LazyColumn {
                 item {
                     ContinueReadingUi()
-                    Spacer(modifier = Modifier.size(10.dp))
+                    Spacer(modifier = Modifier.size(MaterialTheme.dimens.spacingSmall))
                 }
                 item {
                     CategoryUi()
-                    Spacer(modifier = Modifier.size(10.dp))
+                    Spacer(modifier = Modifier.size(MaterialTheme.dimens.spacingSmall))
                 }
                 item {
                     RecomendationUi()
                 }
                 item {
-                    Spacer(modifier = Modifier.size(40.dp))
+                    Spacer(modifier = Modifier.size(MaterialTheme.dimens.spacingExtraLarge))
                 }
             }
 

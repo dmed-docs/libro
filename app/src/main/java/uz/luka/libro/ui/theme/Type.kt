@@ -37,86 +37,263 @@ val Typography = Typography(
 )
 
 val CompactSmallTypography = Typography(
-    titleSmall = TextStyle(
-        fontSize = 12.sp ,
-        fontFamily = FontFamily(listOf(Font(R.font.inter_bold))) ,
+    // Display styles (eng katta matnlar)
+    displayLarge = TextStyle(
+        fontSize = 40.sp,
+        fontFamily = FontFamily(listOf(Font(R.font.inter_bold))),
         color = Color(0xff262626)
-    ) ,
-    headlineSmall = TextStyle(
-        color = DarkGray ,
-        fontFamily = FontFamily(listOf(Font(R.font.inter_bold))) ,
-        fontSize = 10.sp
+    ),
+    displayMedium = TextStyle(
+        fontSize = 32.sp,
+        fontFamily = FontFamily(listOf(Font(R.font.inter_bold))),
+        color = Color(0xff262626)
+    ),
+    displaySmall = TextStyle(
+        fontSize = 28.sp,
+        fontFamily = FontFamily(listOf(Font(R.font.inter_bold))),
+        color = Color(0xff262626)
+    ),
+    
+    // Headline styles (sarlavhalar)
+    headlineLarge = TextStyle(
+        fontSize = 24.sp,
+        fontFamily = FontFamily(listOf(Font(R.font.inter_semibold))),
+        color = MediumGray
     ),
     headlineMedium = TextStyle(
-        fontSize = 12.sp ,
-        fontFamily = FontFamily(listOf(Font(R.font.worksans_semibold))) ,
+        fontSize = 20.sp,
+        fontFamily = FontFamily(listOf(Font(R.font.worksans_semibold))),
         color = Color(0xff262626)
-    ) ,
-    headlineLarge = TextStyle(
-        color = MediumGray ,
-        fontFamily = FontFamily(listOf(Font(R.font.inter_semibold))) ,
-        fontSize = 10.sp
-    ) ,
+    ),
+    headlineSmall = TextStyle(
+        fontSize = 18.sp,
+        fontFamily = FontFamily(listOf(Font(R.font.inter_bold))),
+        color = DarkGray
+    ),
+    
+    // Title styles (kichik sarlavhalar)
+    titleLarge = TextStyle(
+        fontSize = 16.sp,
+        fontFamily = FontFamily(listOf(Font(R.font.inter_bold))),
+        color = Color(0xff262626)
+    ),
+    titleMedium = TextStyle(
+        fontSize = 14.sp,
+        fontFamily = FontFamily(listOf(Font(R.font.inter_semibold))),
+        color = Color(0xff262626)
+    ),
+    titleSmall = TextStyle(
+        fontSize = 12.sp,
+        fontFamily = FontFamily(listOf(Font(R.font.inter_bold))),
+        color = Color(0xff262626)
+    ),
+    
+    // Body styles (asosiy matnlar)
+    bodyLarge = TextStyle(
+        fontSize = 14.sp,
+        fontFamily = FontFamily(listOf(Font(R.font.inter_regular))),
+        color = DarkGray
+    ),
+    bodyMedium = TextStyle(
+        fontSize = 12.sp,
+        fontFamily = FontFamily(listOf(Font(R.font.inter_regular))),
+        color = DarkGray
+    ),
+    bodySmall = TextStyle(
+        fontSize = 10.sp,
+        fontFamily = FontFamily(listOf(Font(R.font.inter_regular))),
+        color = DarkGray
+    ),
+    
+    // Label styles (yorliqlar, tugmalar)
+    labelLarge = TextStyle(
+        fontSize = 14.sp,
+        fontFamily = FontFamily(listOf(Font(R.font.publicsans_medium))),
+        color = LightGray
+    ),
     labelMedium = TextStyle(
-        fontFamily = FontFamily(listOf(Font(R.font.publicsans_medium))) ,
-        color = LightGray ,
-        fontSize = 12.sp
+        fontSize = 12.sp,
+        fontFamily = FontFamily(listOf(Font(R.font.publicsans_medium))),
+        color = LightGray
+    ),
+    labelSmall = TextStyle(
+        fontSize = 10.sp,
+        fontFamily = FontFamily(listOf(Font(R.font.publicsans_medium))),
+        color = LightGray
     )
 )
 
 val CompactMediumTypography = Typography(
-    titleSmall = TextStyle(
-        fontSize = 16.sp ,
-        fontFamily = FontFamily(listOf(Font(R.font.inter_bold))) ,
+    // Display styles (eng katta matnlar)
+    displayLarge = TextStyle(
+        fontSize = 48.sp,
+        fontFamily = FontFamily(listOf(Font(R.font.inter_bold))),
         color = Color(0xff262626)
-    ) ,
-    headlineSmall = TextStyle(
-        color = DarkGray ,
-        fontFamily = FontFamily(listOf(Font(R.font.inter_bold))) ,
-        fontSize = 14.sp
+    ),
+    displayMedium = TextStyle(
+        fontSize = 40.sp,
+        fontFamily = FontFamily(listOf(Font(R.font.inter_bold))),
+        color = Color(0xff262626)
+    ),
+    displaySmall = TextStyle(
+        fontSize = 32.sp,
+        fontFamily = FontFamily(listOf(Font(R.font.inter_bold))),
+        color = Color(0xff262626)
+    ),
+    
+    // Headline styles (sarlavhalar)
+    headlineLarge = TextStyle(
+        fontSize = 28.sp,
+        fontFamily = FontFamily(listOf(Font(R.font.inter_semibold))),
+        color = MediumGray
     ),
     headlineMedium = TextStyle(
-        fontSize = 16.sp ,
-        fontFamily = FontFamily(listOf(Font(R.font.worksans_semibold))) ,
+        fontSize = 24.sp,
+        fontFamily = FontFamily(listOf(Font(R.font.worksans_semibold))),
         color = Color(0xff262626)
-    ) ,
-    headlineLarge = TextStyle(
-        color = MediumGray ,
-        fontFamily = FontFamily(listOf(Font(R.font.inter_semibold))) ,
-        fontSize = 14.sp
-    ) ,
+    ),
+    headlineSmall = TextStyle(
+        fontSize = 20.sp,
+        fontFamily = FontFamily(listOf(Font(R.font.inter_bold))),
+        color = DarkGray
+    ),
+    
+    // Title styles (kichik sarlavhalar)
+    titleLarge = TextStyle(
+        fontSize = 20.sp,
+        fontFamily = FontFamily(listOf(Font(R.font.inter_bold))),
+        color = Color(0xff262626)
+    ),
+    titleMedium = TextStyle(
+        fontSize = 16.sp,
+        fontFamily = FontFamily(listOf(Font(R.font.inter_semibold))),
+        color = Color(0xff262626)
+    ),
+    titleSmall = TextStyle(
+        fontSize = 14.sp,
+        fontFamily = FontFamily(listOf(Font(R.font.inter_bold))),
+        color = Color(0xff262626)
+    ),
+    
+    // Body styles (asosiy matnlar)
+    bodyLarge = TextStyle(
+        fontSize = 16.sp,
+        fontFamily = FontFamily(listOf(Font(R.font.inter_regular))),
+        color = DarkGray
+    ),
+    bodyMedium = TextStyle(
+        fontSize = 14.sp,
+        fontFamily = FontFamily(listOf(Font(R.font.inter_regular))),
+        color = DarkGray
+    ),
+    bodySmall = TextStyle(
+        fontSize = 12.sp,
+        fontFamily = FontFamily(listOf(Font(R.font.inter_regular))),
+        color = DarkGray
+    ),
+    
+    // Label styles (yorliqlar, tugmalar)
+    labelLarge = TextStyle(
+        fontSize = 16.sp,
+        fontFamily = FontFamily(listOf(Font(R.font.publicsans_medium))),
+        color = LightGray
+    ),
     labelMedium = TextStyle(
-        fontFamily = FontFamily(listOf(Font(R.font.publicsans_medium))) ,
-        color = LightGray ,
-        fontSize = 14.sp
+        fontSize = 14.sp,
+        fontFamily = FontFamily(listOf(Font(R.font.publicsans_medium))),
+        color = LightGray
+    ),
+    labelSmall = TextStyle(
+        fontSize = 12.sp,
+        fontFamily = FontFamily(listOf(Font(R.font.publicsans_medium))),
+        color = LightGray
     )
 )
 
 val CompactLargeTypography = Typography(
-    titleSmall = TextStyle(
-        fontSize = 20.sp ,
-        fontFamily = FontFamily(listOf(Font(R.font.inter_bold))) ,
+    // Display styles (eng katta matnlar)
+    displayLarge = TextStyle(
+        fontSize = 56.sp,
+        fontFamily = FontFamily(listOf(Font(R.font.inter_bold))),
         color = Color(0xff262626)
-    ) ,
-    headlineSmall = TextStyle(
-        color = DarkGray ,
-        fontFamily = FontFamily(listOf(Font(R.font.inter_bold))) ,
-        fontSize = 20.sp
+    ),
+    displayMedium = TextStyle(
+        fontSize = 48.sp,
+        fontFamily = FontFamily(listOf(Font(R.font.inter_bold))),
+        color = Color(0xff262626)
+    ),
+    displaySmall = TextStyle(
+        fontSize = 40.sp,
+        fontFamily = FontFamily(listOf(Font(R.font.inter_bold))),
+        color = Color(0xff262626)
+    ),
+    
+    // Headline styles (sarlavhalar)
+    headlineLarge = TextStyle(
+        fontSize = 32.sp,
+        fontFamily = FontFamily(listOf(Font(R.font.inter_semibold))),
+        color = MediumGray
     ),
     headlineMedium = TextStyle(
-        fontSize = 20.sp ,
-        fontFamily = FontFamily(listOf(Font(R.font.worksans_semibold))) ,
+        fontSize = 28.sp,
+        fontFamily = FontFamily(listOf(Font(R.font.worksans_semibold))),
         color = Color(0xff262626)
-    ) ,
-    headlineLarge = TextStyle(
-        color = MediumGray ,
-        fontFamily = FontFamily(listOf(Font(R.font.inter_semibold))) ,
-        fontSize = 18.sp
-    ) ,
+    ),
+    headlineSmall = TextStyle(
+        fontSize = 24.sp,
+        fontFamily = FontFamily(listOf(Font(R.font.inter_bold))),
+        color = DarkGray
+    ),
+    
+    // Title styles (kichik sarlavhalar)
+    titleLarge = TextStyle(
+        fontSize = 24.sp,
+        fontFamily = FontFamily(listOf(Font(R.font.inter_bold))),
+        color = Color(0xff262626)
+    ),
+    titleMedium = TextStyle(
+        fontSize = 20.sp,
+        fontFamily = FontFamily(listOf(Font(R.font.inter_semibold))),
+        color = Color(0xff262626)
+    ),
+    titleSmall = TextStyle(
+        fontSize = 18.sp,
+        fontFamily = FontFamily(listOf(Font(R.font.inter_bold))),
+        color = Color(0xff262626)
+    ),
+    
+    // Body styles (asosiy matnlar)
+    bodyLarge = TextStyle(
+        fontSize = 18.sp,
+        fontFamily = FontFamily(listOf(Font(R.font.inter_regular))),
+        color = DarkGray
+    ),
+    bodyMedium = TextStyle(
+        fontSize = 16.sp,
+        fontFamily = FontFamily(listOf(Font(R.font.inter_regular))),
+        color = DarkGray
+    ),
+    bodySmall = TextStyle(
+        fontSize = 14.sp,
+        fontFamily = FontFamily(listOf(Font(R.font.inter_regular))),
+        color = DarkGray
+    ),
+    
+    // Label styles (yorliqlar, tugmalar)
+    labelLarge = TextStyle(
+        fontSize = 18.sp,
+        fontFamily = FontFamily(listOf(Font(R.font.publicsans_medium))),
+        color = LightGray
+    ),
     labelMedium = TextStyle(
-        fontFamily = FontFamily(listOf(Font(R.font.publicsans_medium))) ,
-        color = LightGray ,
-        fontSize = 18.sp
+        fontSize = 16.sp,
+        fontFamily = FontFamily(listOf(Font(R.font.publicsans_medium))),
+        color = LightGray
+    ),
+    labelSmall = TextStyle(
+        fontSize = 14.sp,
+        fontFamily = FontFamily(listOf(Font(R.font.publicsans_medium))),
+        color = LightGray
     )
 )
 

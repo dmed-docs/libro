@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -22,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import uz.luka.libro.R
 import uz.luka.libro.ui.theme.MainColor
+import uz.luka.libro.ui.theme.dimens
 
 @Composable
 fun ButtonUi(
@@ -41,8 +43,8 @@ fun ButtonUi(
     Button(
         modifier = if (isModifier) modifier else
             Modifier
-                .width(100.dp)
-                .height(36.dp),
+                .width(MaterialTheme.dimens.buttonWidthSmall)
+                .height(MaterialTheme.dimens.buttonHeightMedium),
         colors = ButtonDefaults.buttonColors(
             containerColor = backgroundColor
         ),
@@ -53,7 +55,7 @@ fun ButtonUi(
         if(image != 0) {
             Image(
                 modifier = Modifier
-                    .padding(6.dp),
+                    .padding(MaterialTheme.dimens.paddingTiny),
                 painter = painterResource(id = image) ,
                 contentDescription = ""
             )

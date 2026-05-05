@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -25,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import uz.luka.libro.R
 import uz.luka.libro.ui.theme.Purple
+import uz.luka.libro.ui.theme.dimens
 
 @Composable
 fun CategoryCardUi(
@@ -32,23 +34,23 @@ fun CategoryCardUi(
 ) {
     Column (
         modifier = Modifier
-            .width(43.dp)
+            .width(MaterialTheme.dimens.categoryCardSize)
     ){
         Box (
             modifier = Modifier
-                .size(43.dp)
-                .clip(RoundedCornerShape(8.dp))
+                .size(MaterialTheme.dimens.categoryCardSize)
+                .clip(RoundedCornerShape(MaterialTheme.dimens.cornerRadiusSmall))
                 .background(Purple)
-                .padding(5.dp),
+                .padding(MaterialTheme.dimens.paddingTiny),
             contentAlignment = Alignment.Center
         ){
 
         }
-        Spacer(modifier = Modifier.size(4.dp))
+        Spacer(modifier = Modifier.size(MaterialTheme.dimens.spacingTiny))
         Text(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(20.dp),
+                .height(MaterialTheme.dimens.categoryCardTextHeight),
             text = "Action $text" ,
             style = TextStyle(
                 color = Color(0xff1C1B1F) ,

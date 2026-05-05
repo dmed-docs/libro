@@ -6,6 +6,8 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import uz.luka.libro.presantation.screens.intro.IntroDirection
 import uz.luka.libro.presantation.screens.intro.IntroDirectionImpl
+import uz.luka.libro.presantation.screens.login.LoginDirection
+import uz.luka.libro.presantation.screens.login.LoginDirectionImpl
 import uz.luka.libro.presantation.screens.signup.SignUpDirection
 import uz.luka.libro.presantation.screens.signup.SignUpDirectionImpl
 import uz.luka.libro.presantation.screens.singin.SignInDirection
@@ -18,6 +20,9 @@ interface DirectionsModule {
 
     @[Binds Singleton]
     fun bindIntroDirection(impl : IntroDirectionImpl) : IntroDirection
+
+    @[Binds Singleton]
+    fun bindLoginDirection(impl : LoginDirectionImpl) : LoginDirection
 
     @[Binds Singleton]
     fun bindSignUpDirection(impl : SignUpDirectionImpl) : SignUpDirection

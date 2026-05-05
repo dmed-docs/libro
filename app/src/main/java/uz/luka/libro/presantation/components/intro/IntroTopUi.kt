@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -23,6 +24,7 @@ import androidx.compose.ui.unit.sp
 import uz.luka.libro.R
 import uz.luka.libro.domain.common.IntroCommon
 import uz.luka.libro.ui.theme.DarkGray
+import uz.luka.libro.ui.theme.dimens
 
 @Composable
 fun IntroTopUi(introCommon : IntroCommon) {
@@ -33,13 +35,13 @@ fun IntroTopUi(introCommon : IntroCommon) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
-            modifier = Modifier.width(300.dp),
+            modifier = Modifier.width(MaterialTheme.dimens.imageWidthMedium),
             painter = painterResource(id = introCommon.image),
             contentDescription = ""
         )
-        Spacer(modifier = Modifier.size(10.dp))
+        Spacer(modifier = Modifier.size(MaterialTheme.dimens.spacingSmall))
         Text(
-            modifier = Modifier.width(300.dp),
+            modifier = Modifier.width(MaterialTheme.dimens.imageWidthMedium),
             text = introCommon.title ,
             style = TextStyle(
                 color = DarkGray ,
@@ -48,9 +50,9 @@ fun IntroTopUi(introCommon : IntroCommon) {
                 textAlign = TextAlign.Center
             )
         )
-        Spacer(modifier = Modifier.size(8.dp))
+        Spacer(modifier = Modifier.size(MaterialTheme.dimens.spacingSmall))
         Text(
-            modifier = Modifier.width(300.dp),
+            modifier = Modifier.width(MaterialTheme.dimens.imageWidthMedium),
             text = introCommon.description ,
             style = TextStyle(
                 color = DarkGray ,

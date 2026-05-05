@@ -19,6 +19,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.material3.MaterialTheme
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.hilt.getViewModel
 import com.rahad.riobottomnavigation.composables.RioBottomNavItemData
@@ -30,6 +31,7 @@ import uz.luka.libro.presantation.screens.notification.NotificationScreen
 import uz.luka.libro.presantation.screens.profile.ProfileScreen
 import uz.luka.libro.ui.theme.DarkGray
 import uz.luka.libro.ui.theme.MainColor
+import uz.luka.libro.ui.theme.dimens
 
 class MainScreen : Screen {
     @Composable
@@ -73,8 +75,8 @@ fun BottomNavigationBar(buttons : List<RioBottomNavItemData>) {
     RioBottomNavigation(
         fabIcon = ImageVector.vectorResource(R.drawable.ic_search_ai),
         buttons = buttons ,
-        fabSize = 70.dp ,
-        barHeight = 70.dp ,
+        fabSize = MaterialTheme.dimens.bottomNavFabSize ,
+        barHeight = MaterialTheme.dimens.bottomNavHeight ,
         selectedItemColor = MainColor ,
         fabBackgroundColor = MainColor ,
         onFabClick = {

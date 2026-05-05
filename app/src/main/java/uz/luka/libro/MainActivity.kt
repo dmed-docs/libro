@@ -8,11 +8,13 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.graphics.Color
 import androidx.core.animation.doOnEnd
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.transitions.SlideTransition
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -33,9 +35,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         installSplash()
+
         setContent {
             LibroTheme {
-
                 Navigator(screen = IntroScreen()) { navigator ->
                     LaunchedEffect(key1 = navigator) {
                         navigationHandler.screenState.onEach { it.invoke(navigator) }

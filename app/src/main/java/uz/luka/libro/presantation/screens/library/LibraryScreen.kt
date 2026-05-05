@@ -19,11 +19,13 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.material3.MaterialTheme
 import cafe.adriel.voyager.core.screen.Screen
 import uz.luka.libro.R
 import uz.luka.libro.presantation.components.home.SearchFieldUi
 import uz.luka.libro.presantation.components.library.LibraryCardUi
 import uz.luka.libro.ui.theme.MainColor
+import uz.luka.libro.ui.theme.dimens
 
 class LibraryScreen : Screen {
     @Composable
@@ -38,14 +40,14 @@ fun LibraryScreenContent() {
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
-            .padding(16.dp)
+            .padding(MaterialTheme.dimens.paddingMedium)
     ) {
-        Spacer(modifier = Modifier.size(16.dp))
+        Spacer(modifier = Modifier.size(MaterialTheme.dimens.spacingMedium))
         SearchFieldUi(
             placeholder = "Search for book, e-library or profile" ,
             1
         )
-        Spacer(modifier = Modifier.size(8.dp))
+        Spacer(modifier = Modifier.size(MaterialTheme.dimens.spacingSmall))
         Text(
             text = "Category" ,
             style = TextStyle(
@@ -55,12 +57,12 @@ fun LibraryScreenContent() {
             )
         )
 
-        Spacer(modifier = Modifier.size(16.dp))
+        Spacer(modifier = Modifier.size(MaterialTheme.dimens.spacingMedium))
 
         LazyVerticalGrid(
             columns = GridCells.Fixed(2) ,
-            verticalArrangement = Arrangement.spacedBy(16.dp) ,
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.spacingMedium) ,
+            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimens.spacingMedium)
         ) {
             items(count = 16) {
                 LibraryCardUi()
