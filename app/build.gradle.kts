@@ -72,12 +72,35 @@ dependencies {
     implementation(libs.voyager.tabNavigator)
     implementation(libs.voyager.bottomSheetNavigator)
 
+    implementation (libs.riobottomnavigation)
+
     //systemUiController
     implementation(libs.accompanist.systemuicontroller)
 
     // splash screen
     implementation(libs.androidx.core.splashscreen)
 
-    implementation (libs.riobottomnavigation)
+    // BOM - barcha modul versiyalarini boshqaradi
+    implementation(platform("io.github.jan-tennert.supabase:bom:3.2.6"))
+
+    // ----- MAVJUD MODULLAR -----
+    implementation("io.github.jan-tennert.supabase:postgrest-kt")   // Ma'lumotlar bazasi (PostgreSQL)
+    implementation("io.github.jan-tennert.supabase:auth-kt")        // Autentifikatsiya (login/register)
+    implementation("io.github.jan-tennert.supabase:realtime-kt")    // Real vaqt yangilanishlari
+    implementation("io.github.jan-tennert.supabase:storage-kt")     // Fayl saqlash
+    implementation("io.github.jan-tennert.supabase:functions-kt")   // Edge Functions
+
+    // ----- QO'SHIMCHA PLAGINLAR -----
+    implementation("io.github.jan-tennert.supabase:apollo-graphql")  // GraphQL qo'llab-quvvatlashi
+    implementation("io.github.jan-tennert.supabase:compose-auth")    // Compose uchun autentifikatsiya UI
+    implementation("io.github.jan-tennert.supabase:coil3-integration") // Rasm ko'rsatish (Storage bilan)
+
+    // KTOR HTTP CLIENT - Supabase uchun kerak (YANGILANGAN VERSIYA)
+    implementation("io.ktor:ktor-client-core:3.0.3")
+    implementation("io.ktor:ktor-client-cio:3.0.3")
+    implementation("io.ktor:ktor-client-content-negotiation:3.0.3")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:3.0.3")
+    implementation("io.ktor:ktor-client-logging:3.0.3")
+    implementation("io.ktor:ktor-utils:3.0.3")
 
 }

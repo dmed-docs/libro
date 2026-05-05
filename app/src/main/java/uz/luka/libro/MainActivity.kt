@@ -3,6 +3,7 @@ package uz.luka.libro
 import android.animation.ObjectAnimator
 import android.os.Bundle
 import android.view.View
+import io.github.jan.supabase.postgrest.Postgrest
 import android.view.animation.OvershootInterpolator
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -16,6 +17,7 @@ import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.transitions.SlideTransition
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
+import io.github.jan.supabase.createSupabaseClient
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import uz.luka.libro.presantation.screens.intro.IntroScreen
@@ -35,6 +37,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         installSplash()
+
 
         setContent {
             LibroTheme {

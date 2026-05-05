@@ -10,7 +10,9 @@ interface SignUpWithEmailContract {
     }
 
     data class UiState(
-        val email: String = ""
+        val email: String = "",
+        val isLoading: Boolean = false,
+        val errorMessage: String? = null
     )
 
     sealed interface Intent {

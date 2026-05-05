@@ -91,10 +91,23 @@ fun SignUpWithEmailScreenContent(
                 value = uiState.email,
                 onChangeValue = { onEvent(SignUpWithEmailContract.Intent.OnEmailChange(it)) },
                 label = "Email",
-                borderColor = Color(0xFFE0E0E0),
+                borderColor = if (uiState.errorMessage != null) MainColor else Color(0xFFE0E0E0),
                 isModifier = true,
                 modifier = Modifier.fillMaxWidth()
             )
+            
+            // Error message
+            if (uiState.errorMessage != null) {
+                Spacer(modifier = Modifier.height(MaterialTheme.dimens.spacingSmall))
+                Text(
+                    text = uiState.errorMessage,
+                    style = TextStyle(
+                        fontSize = 12.sp,
+                        color = MainColor,
+                        fontFamily = FontFamily(listOf(Font(R.font.inter_regular)))
+                    )
+                )
+            }
 
             Spacer(modifier = Modifier.weight(1f))
 
@@ -108,17 +121,25 @@ fun SignUpWithEmailScreenContent(
                     containerColor = MainColor
                 ),
                 shape = RoundedCornerShape(MaterialTheme.dimens.cornerRadiusMedium),
-                enabled = uiState.email.isNotEmpty()
+                enabled = uiState.email.isNotEmpty() && !uiState.isLoading
             ) {
-                Text(
-                    text = "Next",
-                    style = TextStyle(
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold,
+                if (uiState.isLoading) {
+                    CircularProgressIndicator(
                         color = Color.White,
-                        fontFamily = FontFamily(listOf(Font(R.font.worksans_semibold)))
+                        modifier = Modifier.size(24.dp)
                     )
-                )
+                } else {
+                    Text(
+                        text = "Next",
+                        style = TextStyle(
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.White,
+                            fontFamily = FontFamily(listOf(Font(R.font.worksans_semibold)))
+                        )
+                    )
+                }
+
             }
 
             Spacer(modifier = Modifier.height(MaterialTheme.dimens.spacingMedium))
