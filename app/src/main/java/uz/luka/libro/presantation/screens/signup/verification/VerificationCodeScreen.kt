@@ -10,6 +10,9 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -107,10 +110,16 @@ fun VerificationCodeScreenContent(
 
             Spacer(modifier = Modifier.height(MaterialTheme.dimens.spacingMedium))
 
-            // Hidden text field for input
+
+            val focusRequester = remember { FocusRequester() }
+
+            LaunchedEffect(Unit) {
+                focusRequester.requestFocus()
+            }
+
             BasicTextField(
                 value = uiState.code,
-                onValueChange = { 
+                onValueChange = {
                     if (it.length <= 6 && it.all { char -> char.isDigit() }) {
                         onEvent(VerificationCodeContract.Intent.OnCodeChange(it))
                     }
@@ -118,12 +127,14 @@ fun VerificationCodeScreenContent(
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(0.dp)
+                    .height(1.dp)
+                    .focusRequester(focusRequester)
+                    .alpha(0f)
             )
 
             Spacer(modifier = Modifier.height(MaterialTheme.dimens.spacingLarge))
 
-            // Resend code
+
             TextButton(
                 onClick = { onEvent(VerificationCodeContract.Intent.OnResendCodeClick) },
                 modifier = Modifier.fillMaxWidth()

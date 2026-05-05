@@ -5,6 +5,7 @@ import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.auth.Auth
 import io.github.jan.supabase.postgrest.Postgrest
 import io.github.jan.supabase.storage.Storage
+import io.ktor.client.engine.cio.CIO
 
 object SupabaseClient {
     
@@ -20,6 +21,11 @@ object SupabaseClient {
             install(Auth)
             install(Postgrest)
             install(Storage)
+            
+            // HTTP Client optimizatsiya
+            httpEngine = CIO.create {
+                requestTimeout = 30_000 // 30 soniya
+            }
         }
     }
 }

@@ -1,6 +1,7 @@
 package uz.luka.libro.presantation.components.profile
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,7 +19,9 @@ import uz.luka.libro.presantation.components.app.TextUi
 import uz.luka.libro.ui.theme.Black
 
 @Composable
-fun ProfileTopContent() {
+fun ProfileTopContent(
+    onMenuClick: () -> Unit = {}
+) {
     Row (
         modifier = Modifier
             .fillMaxWidth()
@@ -34,9 +37,12 @@ fun ProfileTopContent() {
         Spacer(modifier = Modifier.weight(1f))
 
         Image(
-            modifier = Modifier.width(18.dp).height(12.dp),
+            modifier = Modifier
+                .width(18.dp)
+                .height(12.dp)
+                .clickable { onMenuClick() },
             painter = painterResource(id = R.drawable.ic_menu),
-            contentDescription = ""
+            contentDescription = "Menu"
         )
     }
 }

@@ -16,6 +16,7 @@ class AuthRepositoryImpl @Inject constructor(
     
     override suspend fun signUpWithEmail(email: String, password: String): AuthResult<User> {
         return try {
+            // Supabase da signUp avtomatik email yuboradi
             auth.signUpWith(Email) {
                 this.email = email
                 this.password = password

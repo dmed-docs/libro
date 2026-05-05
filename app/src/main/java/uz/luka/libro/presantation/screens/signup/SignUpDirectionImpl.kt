@@ -4,6 +4,7 @@ import uz.luka.libro.presantation.screens.main.MainScreen
 import uz.luka.libro.presantation.screens.signup.birthdate.BirthdateScreen
 import uz.luka.libro.presantation.screens.signup.email.SignUpWithEmailScreen
 import uz.luka.libro.presantation.screens.signup.fullname.FullNameScreen
+import uz.luka.libro.presantation.screens.signup.password.PasswordScreen
 import uz.luka.libro.presantation.screens.signup.phone.SignUpWithPhoneScreen
 import uz.luka.libro.presantation.screens.signup.terms.TermsScreen
 import uz.luka.libro.presantation.screens.signup.verification.VerificationCodeScreen
@@ -28,6 +29,10 @@ class SignUpDirectionImpl @Inject constructor(
 
     override suspend fun moveToVerificationCode(phoneOrEmail: String) {
         appNavigator.push(VerificationCodeScreen(phoneOrEmail))
+    }
+
+    override suspend fun moveToPassword() {
+        appNavigator.push(PasswordScreen())
     }
 
     override suspend fun moveToBirthdate() {

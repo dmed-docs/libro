@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.ksp)
     alias(libs.plugins.android.hilt)
+    kotlin("plugin.serialization") version "2.1.0"
 }
 
 android {

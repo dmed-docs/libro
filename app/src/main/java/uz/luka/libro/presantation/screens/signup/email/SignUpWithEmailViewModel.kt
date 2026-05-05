@@ -15,7 +15,9 @@ import javax.inject.Inject
 @HiltViewModel
 class SignUpWithEmailViewModel @Inject constructor(
     private val signUpDirection: SignUpDirection,
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val signUpDataHolder: uz.luka.libro.presantation.screens.signup.SignUpDataHolder,
+    private val userProfileRepository: uz.luka.libro.domain.repository.UserProfileRepository
 ) : SignUpWithEmailContract.ViewModel, ViewModel() {
 
     private val _uiState = MutableStateFlow(SignUpWithEmailContract.UiState())
@@ -54,13 +56,47 @@ class SignUpWithEmailViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, errorMessage = null) }
             
-            // Temporary password - keyinroq password ekrani qo'shamiz
+            // Email mavjudligini tekshirish
+            when (val result = userProfileRepository.checkEmailOrUsernameExists(email)) {
+                is uz.luka.libro.domain.model.AuthResult.Success -> {
+                    if (result.data == true) {
+                        // Email allaqachon mavjud
+                        _uiState.update { 
+                            it.copy(
+                                isLoading = false,
+                                errorMessage = "Bu email allaqachon ro'yxatdan o'tgan"
+                            ) 
+                        }
+                        return@launch
+                    }
+                    
+                    // Email mavjud emas, davom etish mumkin
+                    signUpDataHolder.email = email
+                    println("🔵 LIBRO: Email saqlandi: ${signUpDataHolder.email}")
+                    
+                    kotlinx.coroutines.delay(500)
+                    _uiState.update { it.copy(isLoading = false) }
+                    signUpDirection.moveToVerificationCode(email)
+                }
+                is uz.luka.libro.domain.model.AuthResult.Error -> {
+                    _uiState.update { 
+                        it.copy(
+                            isLoading = false,
+                            errorMessage = "Xatolik yuz berdi, qaytadan urinib ko'ring"
+                        ) 
+                    }
+                }
+                is uz.luka.libro.domain.model.AuthResult.Loading -> {
+                    _uiState.update { it.copy(isLoading = true) }
+                }
+            }
+            
+            /* KEYINROQ YOQAMIZ:
             val tempPassword = "TempPass123!"
             
             when (val result = authRepository.signUpWithEmail(email, tempPassword)) {
                 is AuthResult.Success -> {
                     _uiState.update { it.copy(isLoading = false) }
-                    // Verification code ekraniga o'tish
                     signUpDirection.moveToVerificationCode(email)
                 }
                 is AuthResult.Error -> {
@@ -75,6 +111,7 @@ class SignUpWithEmailViewModel @Inject constructor(
                     _uiState.update { it.copy(isLoading = true) }
                 }
             }
+            */
         }
     }
 }

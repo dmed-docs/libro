@@ -21,6 +21,7 @@ import io.github.jan.supabase.createSupabaseClient
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import uz.luka.libro.presantation.screens.intro.IntroScreen
+import uz.luka.libro.presantation.screens.main.MainScreen
 import uz.luka.libro.presantation.screens.splash.SplashViewModel
 import uz.luka.libro.ui.theme.LibroTheme
 import uz.luka.libro.utils.navigator.NavigationHandler
@@ -41,7 +42,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             LibroTheme {
-                Navigator(screen = IntroScreen()) { navigator ->
+                Navigator(screen = MainScreen()) { navigator ->
                     LaunchedEffect(key1 = navigator) {
                         navigationHandler.screenState.onEach { it.invoke(navigator) }
                             .launchIn(lifecycleScope)

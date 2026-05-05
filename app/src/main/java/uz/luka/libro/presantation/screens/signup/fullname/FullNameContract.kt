@@ -10,7 +10,9 @@ interface FullNameContract {
     }
 
     data class UiState(
-        val fullName: String = ""
+        val fullName: String = "",
+        val errorMessage: String? = null,
+        val isLoading: Boolean = false
     )
 
     sealed interface Intent {

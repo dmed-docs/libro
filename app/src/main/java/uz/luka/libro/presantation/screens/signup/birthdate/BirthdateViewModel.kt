@@ -12,7 +12,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class BirthdateViewModel @Inject constructor(
-    private val signUpDirection: SignUpDirection
+    private val signUpDirection: SignUpDirection,
+    private val signUpDataHolder: uz.luka.libro.presantation.screens.signup.SignUpDataHolder
 ) : BirthdateContract.ViewModel, ViewModel() {
 
     private val _uiState = MutableStateFlow(BirthdateContract.UiState())
@@ -30,6 +31,9 @@ class BirthdateViewModel @Inject constructor(
             }
             BirthdateContract.Intent.OnNextClick -> {
                 viewModelScope.launch {
+                    // Birthdateni saqlash
+                    signUpDataHolder.birthdate = _uiState.value.birthdate
+                    println("🔵 LIBRO: Birthdate saqlandi: ${signUpDataHolder.birthdate}")
                     signUpDirection.moveToFullName()
                 }
             }

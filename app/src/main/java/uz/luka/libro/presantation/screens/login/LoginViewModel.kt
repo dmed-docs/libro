@@ -11,7 +11,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val loginDirection: LoginDirection
+    private val loginDirection: LoginDirection,
+    private val userProfileRepository: uz.luka.libro.domain.repository.UserProfileRepository
 ) : LoginContract.ViewModel, ViewModel() {
 
     private val _uiState = MutableStateFlow(LoginContract.UiState())
@@ -45,13 +46,37 @@ class LoginViewModel @Inject constructor(
     }
 
     private fun handleLogin() {
+        val email = _uiState.value.usernameOrEmail
+        val password = _uiState.value.password
+        
+        // Validatsiya
+        if (email.isEmpty() || password.isEmpty()) {
+            _uiState.update { it.copy(errorMessage = "Email va parolni kiriting") }
+            return
+        }
+        
         viewModelScope.launch {
-            _uiState.update { it.copy(isLoading = true) }
-            // TODO: Implement actual login logic
-            // For now, just navigate to main screen
-            kotlinx.coroutines.delay(1000)
-            loginDirection.moveToMain()
-            _uiState.update { it.copy(isLoading = false) }
+            _uiState.update { it.copy(isLoading = true, errorMessage = null) }
+            
+            when (val result = userProfileRepository.login(email, password)) {
+                is uz.luka.libro.domain.model.AuthResult.Success -> {
+                    println("✅ LIBRO: Login muvaffaqiyatli - User: ${result.data?.fullName}")
+                    _uiState.update { it.copy(isLoading = false) }
+                    loginDirection.moveToMain()
+                }
+                is uz.luka.libro.domain.model.AuthResult.Error -> {
+                    println("❌ LIBRO: Login xatosi: ${result.message}")
+                    _uiState.update { 
+                        it.copy(
+                            isLoading = false,
+                            errorMessage = result.message
+                        ) 
+                    }
+                }
+                is uz.luka.libro.domain.model.AuthResult.Loading -> {
+                    _uiState.update { it.copy(isLoading = true) }
+                }
+            }
         }
     }
 }

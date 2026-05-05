@@ -10,13 +10,15 @@ interface SignUpWithPhoneContract {
     }
 
     data class UiState(
-        val phoneNumber: String = ""
+        val phoneNumber: String = "",
+        val errorMessage: String? = null,
+        val isLoading: Boolean = false
     )
 
     sealed interface Intent {
-        object OnBackClick : Intent
+        data object OnBackClick : Intent
         data class OnPhoneNumberChange(val value: String) : Intent
-        object OnNextClick : Intent
-        object OnSignUpWithEmailClick : Intent
+        data object OnNextClick : Intent
+        data object OnSignUpWithEmailClick : Intent
     }
 }

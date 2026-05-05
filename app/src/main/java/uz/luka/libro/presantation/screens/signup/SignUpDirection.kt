@@ -5,6 +5,7 @@ interface SignUpDirection {
     suspend fun moveToSignUpWithPhone()
     suspend fun moveToSignUpWithEmail()
     suspend fun moveToVerificationCode(phoneOrEmail: String)
+    suspend fun moveToPassword()
     suspend fun moveToBirthdate()
     suspend fun moveToFullName()
     suspend fun moveToTerms()

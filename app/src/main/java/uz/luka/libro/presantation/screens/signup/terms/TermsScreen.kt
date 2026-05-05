@@ -24,6 +24,7 @@ class TermsScreen : Screen {
         val uiState = viewModel.uiState.collectAsState().value
         
         TermsScreenContent(
+            isLoading = uiState.isLoading,
             onAcceptClick = { viewModel.onEventDispatcher(TermsContract.Intent.AcceptTerms) },
             onBackClick = { viewModel.onEventDispatcher(TermsContract.Intent.OnBackClick) }
         )
@@ -32,6 +33,7 @@ class TermsScreen : Screen {
 
 @Composable
 fun TermsScreenContent(
+    isLoading: Boolean = false,
     onAcceptClick: () -> Unit,
     onBackClick: () -> Unit
 ) {
@@ -46,12 +48,13 @@ fun TermsScreenContent(
         // Back button
         IconButton(
             onClick = onBackClick,
+            enabled = !isLoading,
             modifier = Modifier.size(MaterialTheme.dimens.iconSizeLarge)
         ) {
             Text(
                 text = "←",
                 style = MaterialTheme.typography.headlineMedium,
-                color = Color.Black
+                color = if (isLoading) Color.Gray else Color.Black
             )
         }
         
@@ -107,24 +110,33 @@ fun TermsScreenContent(
             Spacer(modifier = Modifier.height(MaterialTheme.dimens.spacingLarge))
         }
         
-        // Accept button
+        // Accept button with loading state
         Button(
             onClick = onAcceptClick,
+            enabled = !isLoading,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(MaterialTheme.dimens.buttonHeightLarge),
             colors = ButtonDefaults.buttonColors(
-                containerColor = MainColor
+                containerColor = MainColor,
+                disabledContainerColor = MainColor.copy(alpha = 0.5f)
             ),
             shape = RoundedCornerShape(MaterialTheme.dimens.cornerRadiusSmall)
         ) {
-            Text(
-                text = "Qabul qilaman",
-                style = MaterialTheme.typography.bodyLarge.copy(
-                    fontWeight = FontWeight.SemiBold
-                ),
-                color = Color.White
-            )
+            if (isLoading) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(MaterialTheme.dimens.iconSizeMedium),
+                    color = Color.White
+                )
+            } else {
+                Text(
+                    text = "Qabul qilaman",
+                    style = MaterialTheme.typography.bodyLarge.copy(
+                        fontWeight = FontWeight.SemiBold
+                    ),
+                    color = Color.White
+                )
+            }
         }
         
         Spacer(modifier = Modifier.height(MaterialTheme.dimens.spacingSmall))

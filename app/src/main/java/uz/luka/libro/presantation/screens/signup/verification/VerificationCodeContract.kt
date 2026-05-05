@@ -10,7 +10,9 @@ interface VerificationCodeContract {
     }
 
     data class UiState(
-        val code: String = ""
+        val code: String = "",
+        val isLoading: Boolean = false,
+        val errorMessage: String? = null
     )
 
     sealed interface Intent {

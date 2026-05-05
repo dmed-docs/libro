@@ -115,6 +115,21 @@ fun LoginScreenContent(
 
                 Spacer(modifier = Modifier.height(MaterialTheme.dimens.spacingMedium))
 
+                // Error message
+                if (uiState.errorMessage != null) {
+                    Text(
+                        text = uiState.errorMessage,
+                        style = TextStyle(
+                            fontSize = 14.sp,
+                            color = MainColor,
+                            fontWeight = FontWeight.Medium
+                        ),
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    Spacer(modifier = Modifier.height(MaterialTheme.dimens.spacingMedium))
+                }
+
                 // Login Button
                 Button(
                     onClick = { onEvent(LoginContract.Intent.OnLoginClick) },

@@ -96,6 +96,19 @@ fun SignUpWithPhoneScreenContent(
                 modifier = Modifier.fillMaxWidth()
             )
 
+            // Error message
+            if (uiState.errorMessage != null) {
+                Spacer(modifier = Modifier.height(MaterialTheme.dimens.spacingSmall))
+                Text(
+                    text = uiState.errorMessage,
+                    style = TextStyle(
+                        fontSize = 14.sp,
+                        color = MainColor,
+                        fontFamily = FontFamily(listOf(Font(R.font.inter_regular)))
+                    )
+                )
+            }
+
             Spacer(modifier = Modifier.height(MaterialTheme.dimens.spacingSmall))
 
             // Info text
@@ -117,20 +130,28 @@ fun SignUpWithPhoneScreenContent(
                     .fillMaxWidth()
                     .height(MaterialTheme.dimens.buttonHeightLarge),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = MainColor
+                    containerColor = MainColor,
+                    disabledContainerColor = MainColor.copy(alpha = 0.5f)
                 ),
                 shape = RoundedCornerShape(MaterialTheme.dimens.cornerRadiusMedium),
-                enabled = uiState.phoneNumber.isNotEmpty()
+                enabled = uiState.phoneNumber.isNotEmpty() && !uiState.isLoading
             ) {
-                Text(
-                    text = "Next",
-                    style = TextStyle(
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.White,
-                        fontFamily = FontFamily(listOf(Font(R.font.worksans_semibold)))
+                if (uiState.isLoading) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(24.dp),
+                        color = Color.White
                     )
-                )
+                } else {
+                    Text(
+                        text = "Next",
+                        style = TextStyle(
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.White,
+                            fontFamily = FontFamily(listOf(Font(R.font.worksans_semibold)))
+                        )
+                    )
+                }
             }
 
             Spacer(modifier = Modifier.height(MaterialTheme.dimens.spacingMedium))

@@ -12,7 +12,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SignUpWithPhoneViewModel @Inject constructor(
-    private val signUpDirection: SignUpDirection
+    private val signUpDirection: SignUpDirection,
+    private val signUpDataHolder: uz.luka.libro.presantation.screens.signup.SignUpDataHolder,
+    private val userProfileRepository: uz.luka.libro.domain.repository.UserProfileRepository
 ) : SignUpWithPhoneContract.ViewModel, ViewModel() {
 
     private val _uiState = MutableStateFlow(SignUpWithPhoneContract.UiState())
@@ -26,16 +28,56 @@ class SignUpWithPhoneViewModel @Inject constructor(
                 }
             }
             is SignUpWithPhoneContract.Intent.OnPhoneNumberChange -> {
-                _uiState.update { it.copy(phoneNumber = intent.value) }
+                _uiState.update { it.copy(phoneNumber = intent.value, errorMessage = null) }
             }
             SignUpWithPhoneContract.Intent.OnNextClick -> {
-                viewModelScope.launch {
-                    signUpDirection.moveToVerificationCode(_uiState.value.phoneNumber)
-                }
+                checkAndProceed()
             }
             SignUpWithPhoneContract.Intent.OnSignUpWithEmailClick -> {
                 viewModelScope.launch {
                     signUpDirection.moveToSignUpWithEmail()
+                }
+            }
+        }
+    }
+    
+    private fun checkAndProceed() {
+        val phone = _uiState.value.phoneNumber
+        
+        if (phone.isEmpty()) {
+            _uiState.update { it.copy(errorMessage = "Telefon raqamini kiriting") }
+            return
+        }
+        
+        viewModelScope.launch {
+            _uiState.update { it.copy(isLoading = true, errorMessage = null) }
+            
+            when (val result = userProfileRepository.checkPhoneExists(phone)) {
+                is uz.luka.libro.domain.model.AuthResult.Success -> {
+                    if (result.data == true) {
+                        _uiState.update { 
+                            it.copy(
+                                isLoading = false,
+                                errorMessage = "Bu telefon raqam allaqachon ro'yxatdan o'tgan"
+                            ) 
+                        }
+                        return@launch
+                    }
+                    
+                    signUpDataHolder.phone = phone
+                    _uiState.update { it.copy(isLoading = false) }
+                    signUpDirection.moveToVerificationCode(phone)
+                }
+                is uz.luka.libro.domain.model.AuthResult.Error -> {
+                    _uiState.update { 
+                        it.copy(
+                            isLoading = false,
+                            errorMessage = "Xatolik yuz berdi"
+                        ) 
+                    }
+                }
+                is uz.luka.libro.domain.model.AuthResult.Loading -> {
+                    _uiState.update { it.copy(isLoading = true) }
                 }
             }
         }
