@@ -16,7 +16,10 @@ import uz.luka.libro.presantation.components.app.ImageButtonUi
 import uz.luka.libro.ui.theme.MainColor
 
 @Composable
-fun ProfileButtonsUi() {
+fun ProfileButtonsUi(
+    onEditProfileClick: () -> Unit = {},
+    onShareProfileClick: () -> Unit = {}
+) {
     Row (
         modifier = Modifier
             .fillMaxWidth()
@@ -32,7 +35,7 @@ fun ProfileButtonsUi() {
             fontFamily = R.font.inter_bold ,
             cornerRadius = 8
         ) {
-
+            onEditProfileClick()
         }
         Spacer(modifier = Modifier.size(4.dp))
         ButtonUi(
@@ -45,7 +48,7 @@ fun ProfileButtonsUi() {
             fontFamily = R.font.inter_bold ,
             cornerRadius = 8
         ) {
-
+            onShareProfileClick()
         }
         Spacer(modifier = Modifier.size(4.dp))
 

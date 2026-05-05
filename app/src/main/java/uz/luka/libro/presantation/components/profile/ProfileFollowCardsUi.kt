@@ -9,20 +9,24 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun ProfileInfoCardsUi() {
+fun ProfileInfoCardsUi(
+    readsCount: Int = 0,
+    followingCount: Int = 0,
+    followersCount: Int = 0
+) {
     Row {
         ProfileInfoCardUi(
-            number = "21",
+            number = readsCount.toString(),
             name = "Reads"
         )
         Spacer(modifier = Modifier.size(16.dp))
         ProfileInfoCardUi(
-            number = "120",
+            number = followingCount.toString(),
             name = "Following"
         )
         Spacer(modifier = Modifier.size(16.dp))
         ProfileInfoCardUi(
-            number = "300",
+            number = followersCount.toString(),
             name = "Followers"
         )
     }

@@ -20,6 +20,7 @@ import uz.luka.libro.ui.theme.Black
 
 @Composable
 fun ProfileTopContent(
+    username: String = "",
     onMenuClick: () -> Unit = {}
 ) {
     Row (
@@ -29,7 +30,7 @@ fun ProfileTopContent(
         verticalAlignment = Alignment.CenterVertically
     ){
         TextUi(
-            text = "xojiakbar_2329" ,
+            text = username ,
             color = Black ,
             fontSize = 14 ,
             fontFamily = R.font.inter_bold

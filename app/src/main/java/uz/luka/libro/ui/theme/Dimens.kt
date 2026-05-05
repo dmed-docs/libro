@@ -82,7 +82,7 @@ val CompactSmallDimens = Dimens(
     buttonHeightLarge = 36.dp,
     textFieldHeight = 48.dp,
     searchBarHeight = 36.dp,
-    topBarHeight = 100.dp,
+    topBarHeight = 120.dp,
     bottomNavHeight = 60.dp,
     bottomNavFabSize = 60.dp,
     
@@ -140,7 +140,7 @@ val CompactMediumDimens = Dimens(
     buttonHeightLarge = 42.dp,
     textFieldHeight = 53.dp,
     searchBarHeight = 40.dp,
-    topBarHeight = 120.dp,
+    topBarHeight = 140.dp,
     bottomNavHeight = 70.dp,
     bottomNavFabSize = 70.dp,
     
@@ -198,7 +198,7 @@ val CompactDimens = Dimens(
     buttonHeightLarge = 48.dp,
     textFieldHeight = 58.dp,
     searchBarHeight = 44.dp,
-    topBarHeight = 130.dp,
+    topBarHeight = 150.dp,
     bottomNavHeight = 75.dp,
     bottomNavFabSize = 75.dp,
     
@@ -256,7 +256,7 @@ val MediumDimens = Dimens(
     buttonHeightLarge = 52.dp,
     textFieldHeight = 62.dp,
     searchBarHeight = 48.dp,
-    topBarHeight = 140.dp,
+    topBarHeight = 160.dp,
     bottomNavHeight = 80.dp,
     bottomNavFabSize = 80.dp,
     
@@ -314,7 +314,7 @@ val ExpandedDimens = Dimens(
     buttonHeightLarge = 58.dp,
     textFieldHeight = 68.dp,
     searchBarHeight = 52.dp,
-    topBarHeight = 160.dp,
+    topBarHeight = 180.dp,
     bottomNavHeight = 90.dp,
     bottomNavFabSize = 90.dp,
     

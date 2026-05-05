@@ -15,25 +15,32 @@ import uz.luka.libro.ui.theme.Black
 import uz.luka.libro.ui.theme.DarkGray
 
 @Composable
-fun ProfileInfoUi() {
+fun ProfileInfoUi(
+    fullName: String = "",
+    bio: String = ""
+) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(4.dp)
     ) {
-        TextUi(
-            text = "xojiakbar_2329" ,
-            color = Black ,
-            fontFamily = R.font.inter_bold ,
-            fontSize = 12
-        )
-        Spacer(modifier = Modifier.size(4.dp))
-        TextUi(
-            text = "Bookworm by day, dreamer by night" ,
-            color = DarkGray ,
-            fontFamily = R.font.inter_regular ,
-            fontSize = 12
-        )
+        if (fullName.isNotEmpty()) {
+            TextUi(
+                text = fullName ,
+                color = Black ,
+                fontFamily = R.font.inter_bold ,
+                fontSize = 12
+            )
+            Spacer(modifier = Modifier.size(4.dp))
+        }
+        if (bio.isNotEmpty()) {
+            TextUi(
+                text = bio ,
+                color = DarkGray ,
+                fontFamily = R.font.inter_regular ,
+                fontSize = 12
+            )
+        }
     }
 }
 

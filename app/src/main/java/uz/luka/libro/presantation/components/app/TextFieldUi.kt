@@ -41,7 +41,9 @@ fun TextFieldUi(
     borderColor : Color = LightGray ,
     cross : Int = 0 ,
     errorState : Boolean = false ,
-    errorMessage : String = ""
+    errorMessage : String = "",
+    singleLine: Boolean = true,
+    maxLines: Int = 1
 ) {
 
     OutlinedTextField(
@@ -107,7 +109,9 @@ fun TextFieldUi(
             PasswordVisualTransformation()
         } else {
             VisualTransformation.None
-        }
+        },
+        singleLine = singleLine,
+        maxLines = maxLines
     )
 
 }

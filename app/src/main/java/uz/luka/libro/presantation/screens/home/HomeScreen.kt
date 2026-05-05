@@ -59,6 +59,7 @@ fun HomeScreenContent() {
             modifier = Modifier
                 .padding(MaterialTheme.dimens.paddingMedium)
         ){
+            Spacer(Modifier.size(20.dp))
             Text(
                 text = "Hi, Luka" ,
                 style = TextStyle(

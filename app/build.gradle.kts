@@ -96,6 +96,10 @@ dependencies {
     implementation("io.github.jan-tennert.supabase:compose-auth")    // Compose uchun autentifikatsiya UI
     implementation("io.github.jan-tennert.supabase:coil3-integration") // Rasm ko'rsatish (Storage bilan)
 
+    // Coil3 - Image Loading
+    implementation("io.coil-kt.coil3:coil-compose:3.0.4")
+    implementation("io.coil-kt.coil3:coil-network-okhttp:3.0.4")
+
     // KTOR HTTP CLIENT - Supabase uchun kerak (YANGILANGAN VERSIYA)
     implementation("io.ktor:ktor-client-core:3.0.3")
     implementation("io.ktor:ktor-client-cio:3.0.3")
