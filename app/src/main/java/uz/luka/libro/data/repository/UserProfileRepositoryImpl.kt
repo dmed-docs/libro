@@ -15,33 +15,31 @@ class UserProfileRepositoryImpl @Inject constructor(
     
     override suspend fun createProfile(
         userId: String,
-        fullName: String,
+        username: String,
         birthdate: String,
         password: String
     ): AuthResult<UserProfile> {
         return try {
             // Map sifatida yuborish - serialization muammosini hal qiladi
             val profileData = mapOf(
-                "full_name" to fullName,
+                "username" to username,
                 "birthdate" to birthdate,
-                "password" to password, // TEST UCHUN - keyinchalik auth.users ga o'tadi
-                "email" to userId // userId o'rniga email yuboramiz
+                "password" to password,
+                "email" to userId.lowercase() // Email lowercase
             )
             
             println("🔵 LIBRO: Bazaga yuborilayotgan ma'lumot: ${profileData.filterKeys { it != "password" }}")
             
-            postgrest["user_profiles"].insert(profileData)
+            // Insert qilish va yaratilgan profilni olish
+            val insertedProfile = postgrest["user_profiles"]
+                .insert(profileData) {
+                    select()
+                }
+                .decodeSingle<UserProfile>()
             
-            println("✅ LIBRO: Insert muvaffaqiyatli!")
+            println("✅ LIBRO: Insert muvaffaqiyatli! ID: ${insertedProfile.id}")
             
-            // Yaratilgan profilni qaytarish
-            val profile = UserProfile(
-                id = null,
-                fullName = fullName,
-                birthdate = birthdate
-            )
-            
-            AuthResult.Success(profile)
+            AuthResult.Success(insertedProfile)
         } catch (e: Exception) {
             println("❌ LIBRO: Insert xatosi: ${e.message}")
             e.printStackTrace()
@@ -67,17 +65,30 @@ class UserProfileRepositoryImpl @Inject constructor(
     
     override suspend fun updateProfile(
         userId: String,
-        fullName: String?,
+        username: String?,
         birthdate: String?,
         avatarUrl: String?,
-        bio: String?
+        bio: String?,
+        location: String?,
+        gender: String?,
+        websiteUrl: String?
     ): AuthResult<UserProfile> {
         return try {
-            val updates = mutableMapOf<String, Any>()
-            fullName?.let { updates["full_name"] = it }
-            birthdate?.let { updates["birthdate"] = it }
-            avatarUrl?.let { updates["avatar_url"] = it }
-            bio?.let { updates["bio"] = it }
+            val updates = buildMap<String, String> {
+                username?.let { put("username", it) }
+                birthdate?.let { put("birthdate", it) }
+                avatarUrl?.let { put("avatar_url", it) }
+                bio?.let { put("bio", it) }
+                location?.let { put("location", it) }
+                gender?.let { put("gender", it) }
+                websiteUrl?.let { put("website_url", it) }
+            }
+            
+            if (updates.isEmpty()) {
+                return AuthResult.Error("Hech narsa o'zgartirilmadi")
+            }
+            
+            println("🔵 LIBRO: Profil yangilanmoqda - updates: $updates")
             
             postgrest["user_profiles"].update(updates) {
                 filter {
@@ -94,8 +105,12 @@ class UserProfileRepositoryImpl @Inject constructor(
                 }
                 .decodeSingle<UserProfile>()
             
+            println("✅ LIBRO: Profil yangilandi")
+            
             AuthResult.Success(profile)
         } catch (e: Exception) {
+            println("❌ LIBRO: Profil yangilashda xato: ${e.message}")
+            e.printStackTrace()
             AuthResult.Error(e.message ?: "Profil yangilashda xatolik")
         }
     }
@@ -105,16 +120,17 @@ class UserProfileRepositoryImpl @Inject constructor(
         password: String
     ): AuthResult<UserProfile> {
         return try {
-            println("🔵 LIBRO: Login urinishi - input: $email")
+            val input = email.trim().lowercase()
+            println("🔵 LIBRO: Login urinishi - input: $input")
             println("🔵 LIBRO: Password: ${password.take(3)}***")
             
-            // Avval password tekshirish uchun faqat password ni olish
+            // Email yoki username bilan qidirish
             val passwordCheck = postgrest["user_profiles"]
-                .select(columns = Columns.list("id", "password", "email", "full_name")) {
+                .select(columns = Columns.list("id", "password", "email", "username")) {
                     filter {
                         or {
-                            eq("email", email)
-                            eq("full_name", email)
+                            ilike("email", input)
+                            eq("username", input)
                         }
                     }
                 }
@@ -128,6 +144,11 @@ class UserProfileRepositoryImpl @Inject constructor(
             }
             
             val savedPassword = passwordCheck["password"]
+            val foundEmail = passwordCheck["email"]
+            val foundUsername = passwordCheck["username"]
+            
+            println("🔵 LIBRO: Topilgan email: $foundEmail")
+            println("🔵 LIBRO: Topilgan username: $foundUsername")
             println("🔵 LIBRO: Saqlangan parol: ${savedPassword?.take(3)}***")
             println("🔵 LIBRO: Kiritilgan parol: ${password.take(3)}***")
             
@@ -141,14 +162,14 @@ class UserProfileRepositoryImpl @Inject constructor(
             
             // Password to'g'ri bo'lsa, user profilini olish (password siz)
             val profile = postgrest["user_profiles"]
-                .select(columns = Columns.list("id", "full_name", "birthdate", "email", "avatar_url", "bio", "created_at", "updated_at")) {
+                .select(columns = Columns.ALL) {
                     filter {
                         eq("id", userId)
                     }
                 }
                 .decodeSingle<UserProfile>()
             
-            println("✅ LIBRO: Login muvaffaqiyatli! User: ${profile.fullName}")
+            println("✅ LIBRO: Login muvaffaqiyatli! User: ${profile.username}")
             AuthResult.Success(profile)
         } catch (e: Exception) {
             println("❌ LIBRO: Login xatosi: ${e.message}")
@@ -158,70 +179,73 @@ class UserProfileRepositoryImpl @Inject constructor(
     }
 
 
-    override suspend fun checkEmailOrUsernameExists(
-        email: String,
-        username: String?
-    ): AuthResult<Boolean> {
+    override suspend fun checkEmailExists(email: String): AuthResult<Boolean> {
         return try {
-            println("🔵 LIBRO: Email/Username tekshirilmoqda - email: $email, username: $username")
-
-            // Email yoki username mavjudligini tekshirish
-            val count = if (username != null) {
-                postgrest["user_profiles"]
-                    .select(columns = Columns.list("id")) {
-                        filter {
-                            or {
-                                eq("email", email)
-                                eq("full_name", username)
-                            }
-                        }
-                    }
-                    .decodeList<Map<String, String>>()
-                    .size
-            } else {
-                postgrest["user_profiles"]
-                    .select(columns = Columns.list("id")) {
-                        filter {
-                            eq("email", email)
-                        }
-                    }
-                    .decodeList<Map<String, String>>()
-                    .size
+            val emailLower = email.trim().lowercase()
+            
+            val allProfiles = postgrest["user_profiles"]
+                .select(columns = Columns.list("id", "email")) {
+                    // Filter yo'q - hammasini olish
+                }
+                .decodeList<Map<String, String?>>()
+            
+            val exists = allProfiles.any { profile ->
+                val dbEmail = profile["email"]?.trim()?.lowercase()
+                dbEmail == emailLower
             }
-
-            val exists = count > 0
-            println("🔵 LIBRO: Mavjudmi? $exists")
-
+            
             AuthResult.Success(exists)
         } catch (e: Exception) {
-            println("❌ LIBRO: Tekshirish xatosi: ${e.message}")
+            println("❌ LIBRO: Email tekshirish xatosi: ${e.message}")
             e.printStackTrace()
-            AuthResult.Error(e.message ?: "Tekshirish xatosi")
+            AuthResult.Error(e.message ?: "Email tekshirish xatosi")
+        }
+    }
+
+    override suspend fun checkUsernameExists(username: String): AuthResult<Boolean> {
+        return try {
+            val usernameTrimmed = username.trim()
+            
+            val count = postgrest["user_profiles"]
+                .select(columns = Columns.list("id")) {
+                    filter {
+                        eq("username", usernameTrimmed)
+                    }
+                }
+                .decodeList<Map<String, String>>()
+                .size
+            
+            val exists = count > 0
+            
+            AuthResult.Success(exists)
+        } catch (e: Exception) {
+            println("❌ LIBRO: Username tekshirish xatosi: ${e.message}")
+            e.printStackTrace()
+            AuthResult.Error(e.message ?: "Username tekshirish xatosi")
         }
     }
 
 
     override suspend fun checkPhoneExists(phone: String): AuthResult<Boolean> {
         return try {
-            println("🔵 LIBRO: Phone tekshirilmoqda - phone: $phone")
+            val phoneTrimmed = phone.trim()
 
             val count = postgrest["user_profiles"]
                 .select(columns = Columns.list("id")) {
                     filter {
-                        eq("phone", phone)
+                        eq("phone", phoneTrimmed)
                     }
                 }
                 .decodeList<Map<String, String>>()
                 .size
 
             val exists = count > 0
-            println("🔵 LIBRO: Phone mavjudmi? $exists")
 
             AuthResult.Success(exists)
         } catch (e: Exception) {
             println("❌ LIBRO: Phone tekshirish xatosi: ${e.message}")
             e.printStackTrace()
-            AuthResult.Error(e.message ?: "Tekshirish xatosi")
+            AuthResult.Error(e.message ?: "Phone tekshirish xatosi")
         }
     }
 }

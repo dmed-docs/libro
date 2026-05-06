@@ -7,7 +7,7 @@ interface UserProfileRepository {
     
     suspend fun createProfile(
         userId: String,
-        fullName: String,
+        username: String,
         birthdate: String,
         password: String
     ): AuthResult<UserProfile>
@@ -16,10 +16,13 @@ interface UserProfileRepository {
     
     suspend fun updateProfile(
         userId: String,
-        fullName: String? = null,
+        username: String? = null,
         birthdate: String? = null,
         avatarUrl: String? = null,
-        bio: String? = null
+        bio: String? = null,
+        location: String? = null,
+        gender: String? = null,
+        websiteUrl: String? = null
     ): AuthResult<UserProfile>
     
     // Login funksiyasi
@@ -28,11 +31,11 @@ interface UserProfileRepository {
         password: String
     ): AuthResult<UserProfile>
     
-    // Email yoki username mavjudligini tekshirish
-    suspend fun checkEmailOrUsernameExists(
-        email: String,
-        username: String? = null
-    ): AuthResult<Boolean>
+    // Email mavjudligini tekshirish
+    suspend fun checkEmailExists(email: String): AuthResult<Boolean>
+    
+    // Username mavjudligini tekshirish
+    suspend fun checkUsernameExists(username: String): AuthResult<Boolean>
     
     // Phone mavjudligini tekshirish
     suspend fun checkPhoneExists(phone: String): AuthResult<Boolean>

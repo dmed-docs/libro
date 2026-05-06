@@ -1,5 +1,6 @@
 package uz.luka.libro.presantation.screens.settings
 
+import android.app.Activity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -10,30 +11,49 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.hilt.getViewModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import uz.luka.libro.MainActivity
 import uz.luka.libro.R
+import uz.luka.libro.presantation.screens.intro.IntroScreen
 import uz.luka.libro.ui.theme.MainColor
 import uz.luka.libro.ui.theme.dimens
 
 class SettingsScreen : Screen {
     @Composable
     override fun Content() {
+        val viewModel: SettingsViewModel = getViewModel()
         val navigator = LocalNavigator.currentOrThrow
         
+        // Side effects
+        LaunchedEffect(Unit) {
+            viewModel.sideEffect.collect { effect ->
+                when (effect) {
+                    SettingsContract.SideEffect.NavigateToLogin -> {
+                        // Navigator ni tozalash va IntroScreen ga o'tish
+                        navigator.replaceAll(IntroScreen())
+                    }
+                }
+            }
+        }
+        
         SettingsScreenContent(
-            onBackClick = { navigator.pop() }
+            onBackClick = { navigator.pop() },
+            onLogoutClick = { viewModel.onEventDispatcher(SettingsContract.Intent.OnLogoutClick) }
         )
     }
 }
 
 @Composable
 fun SettingsScreenContent(
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onLogoutClick: () -> Unit = {}
 ) {
     val scrollState = rememberScrollState()
     
@@ -160,7 +180,7 @@ fun SettingsScreenContent(
                 title = "Chiqish",
                 titleColor = MainColor,
                 showArrow = false,
-                onClick = { /* TODO: Logout */ }
+                onClick = onLogoutClick
             )
             
             Spacer(modifier = Modifier.height(MaterialTheme.dimens.spacingExtraLarge))

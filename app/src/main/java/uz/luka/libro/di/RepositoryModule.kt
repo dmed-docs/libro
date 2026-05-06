@@ -21,4 +21,8 @@ interface RepositoryModule {
     @Binds
     @Singleton
     fun bindUserProfileRepository(impl: UserProfileRepositoryImpl): UserProfileRepository
+    
+    @Binds
+    @Singleton
+    fun bindStorageRepository(impl: uz.luka.libro.data.repository.StorageRepositoryImpl): uz.luka.libro.domain.repository.StorageRepository
 }

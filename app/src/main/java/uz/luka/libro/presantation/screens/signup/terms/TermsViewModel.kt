@@ -16,7 +16,8 @@ import javax.inject.Inject
 class TermsViewModel @Inject constructor(
     private val signUpDirection: SignUpDirection,
     private val userProfileRepository: UserProfileRepository,
-    private val signUpDataHolder: uz.luka.libro.presantation.screens.signup.SignUpDataHolder
+    private val signUpDataHolder: uz.luka.libro.presantation.screens.signup.SignUpDataHolder,
+    private val userSession: uz.luka.libro.data.local.UserSession
 ) : TermsContract.ViewModel, ViewModel() {
     
     private val _uiState = MutableStateFlow(TermsContract.UiState())
@@ -38,26 +39,44 @@ class TermsViewModel @Inject constructor(
         val birthdate = signUpDataHolder.birthdate
         val password = signUpDataHolder.password
         
+        // Username ni full_name dan yaratish (lowercase va space o'rniga underscore)
+        val username = fullName.lowercase().replace(" ", "_")
+        
         println("🔵 LIBRO: Bazaga saqlash boshlandi...")
         println("🔵 LIBRO: email = $email")
         println("🔵 LIBRO: fullName = $fullName")
+        println("🔵 LIBRO: username = $username")
         println("🔵 LIBRO: birthdate = $birthdate")
         println("🔵 LIBRO: password = ${password.take(3)}*** (yashirin)")
         
         // User profilini bazaga saqlash (ID ni database yaratadi)
         when (val result = userProfileRepository.createProfile(
             userId = email, // Email ni userId sifatida yuboramiz
-            fullName = fullName,
+            username = username,
             birthdate = birthdate,
             password = password
         )) {
             is AuthResult.Success -> {
-                println("✅ LIBRO: Bazaga saqlandi!")
-                // Ma'lumotlarni tozalash
-                signUpDataHolder.clear()
-                _uiState.update { it.copy(isLoading = false) }
-                // MainScreen ga o'tish
-                signUpDirection.moveToMain()
+                val userProfile = result.data
+                if (userProfile != null) {
+                    // User session ga saqlash
+                    userSession.saveUserSession(
+                        userId = userProfile.id ?: "",
+                        username = userProfile.username,
+                        email = userProfile.email,
+                        avatarUrl = userProfile.avatarUrl
+                    )
+                    
+                    println("✅ LIBRO: Bazaga saqlandi va session yaratildi!")
+                    // Ma'lumotlarni tozalash
+                    signUpDataHolder.clear()
+                    _uiState.update { it.copy(isLoading = false) }
+                    // MainScreen ga o'tish
+                    signUpDirection.moveToMain()
+                } else {
+                    println("❌ LIBRO: User profil yaratilmadi")
+                    _uiState.update { it.copy(isLoading = false) }
+                }
             }
             is AuthResult.Error -> {
                 println("❌ LIBRO: Xato: ${result.message}")
@@ -66,8 +85,6 @@ class TermsViewModel @Inject constructor(
                         isLoading = false
                     ) 
                 }
-                // Xato bo'lsa ham MainScreen ga o'tish (test uchun)
-                signUpDirection.moveToMain()
             }
             is AuthResult.Loading -> {
                 _uiState.update { it.copy(isLoading = true) }

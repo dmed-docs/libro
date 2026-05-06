@@ -18,11 +18,13 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil3.compose.AsyncImage
 import uz.luka.libro.R
 
 @Composable
 fun ProfileMainUi(
     profileImageRes: Int? = null,
+    avatarUrl: String? = null,
     fullName: String = "",
     bio: String = "",
     readsCount: Int = 0,
@@ -46,12 +48,22 @@ fun ProfileMainUi(
                     .clip(RoundedCornerShape(50))
                     .background(Color.LightGray)
             ){
-                profileImageRes?.let {
-                    Image(
-                        painter = painterResource(id = it) ,
-                        contentDescription = "" ,
-                        contentScale = ContentScale.Crop
-                    )
+                when {
+                    avatarUrl != null -> {
+                        AsyncImage(
+                            model = avatarUrl,
+                            contentDescription = "Profile Avatar",
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier.size(72.dp)
+                        )
+                    }
+                    profileImageRes != null -> {
+                        Image(
+                            painter = painterResource(id = profileImageRes),
+                            contentDescription = "Profile Image",
+                            contentScale = ContentScale.Crop
+                        )
+                    }
                 }
             }
 

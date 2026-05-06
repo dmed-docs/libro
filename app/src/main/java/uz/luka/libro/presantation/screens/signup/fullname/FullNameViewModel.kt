@@ -46,18 +46,18 @@ class FullNameViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
             
+            // Username ni full_name dan yaratish (lowercase va space o'rniga underscore)
+            val username = fullName.lowercase().replace(" ", "_")
+            
             // Username mavjudligini tekshirish
-            when (val result = userProfileRepository.checkEmailOrUsernameExists(
-                email = signUpDataHolder.email,
-                username = fullName
-            )) {
+            when (val result = userProfileRepository.checkUsernameExists(username)) {
                 is uz.luka.libro.domain.model.AuthResult.Success -> {
                     if (result.data == true) {
                         // Username allaqachon mavjud
                         _uiState.update { 
                             it.copy(
                                 isLoading = false,
-                                errorMessage = "Bu username allaqachon band"
+                                errorMessage = "Bu username allaqachon band. Boshqa username tanlang."
                             ) 
                         }
                         return@launch
@@ -65,8 +65,7 @@ class FullNameViewModel @Inject constructor(
                     
                     // Username mavjud emas, davom etish mumkin
                     signUpDataHolder.fullName = fullName
-                    println("🔵 LIBRO: Full name saqlandi: ${signUpDataHolder.fullName}")
-                    _uiState.update { it.copy(isLoading = false) }
+                    _uiState.update { it.copy(isLoading = false, errorMessage = null) }
                     signUpDirection.moveToTerms()
                 }
                 is uz.luka.libro.domain.model.AuthResult.Error -> {

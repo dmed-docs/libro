@@ -29,9 +29,12 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -47,10 +50,12 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.hilt.getViewModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import coil3.compose.AsyncImage
 import uz.luka.libro.R
+import uz.luka.libro.presantation.components.app.ButtonUi
 import uz.luka.libro.presantation.components.app.TextFieldUi
 import uz.luka.libro.presantation.components.app.TextUi
 import uz.luka.libro.ui.theme.Black
@@ -62,23 +67,79 @@ import java.io.File
 class EditProfileScreen : Screen {
     @Composable
     override fun Content() {
-        EditProfileScreenContent()
+        val viewModel: EditProfileViewModel = getViewModel()
+        val uiState by viewModel.uiState.collectAsState()
+        val navigator = LocalNavigator.currentOrThrow
+        val context = LocalContext.current
+
+        // Side effects
+        LaunchedEffect(Unit) {
+            viewModel.sideEffect.collect { effect ->
+                when (effect) {
+                    EditProfileContract.SideEffect.NavigateBack -> {
+                        navigator.pop()
+                    }
+                    is EditProfileContract.SideEffect.ShowToast -> {
+                        Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        }
+
+        EditProfileScreenContent(
+            isLoading = uiState.isLoading,
+            isSaving = uiState.isSaving,
+            isUploadingImage = uiState.isUploadingImage,
+            username = uiState.username,
+            location = uiState.location,
+            bio = uiState.bio,
+            gender = uiState.gender,
+            websiteUrl = uiState.websiteUrl,
+            profileImageUri = uiState.profileImageUri,
+            avatarUrl = uiState.avatarUrl,
+            onUsernameChange = { viewModel.onEventDispatcher(EditProfileContract.Intent.OnUsernameChange(it)) },
+            onLocationChange = { viewModel.onEventDispatcher(EditProfileContract.Intent.OnLocationChange(it)) },
+            onBioChange = { viewModel.onEventDispatcher(EditProfileContract.Intent.OnBioChange(it)) },
+            onGenderChange = { viewModel.onEventDispatcher(EditProfileContract.Intent.OnGenderChange(it)) },
+            onWebsiteUrlChange = { viewModel.onEventDispatcher(EditProfileContract.Intent.OnWebsiteUrlChange(it)) },
+            onProfileImageSelected = { viewModel.onEventDispatcher(EditProfileContract.Intent.OnProfileImageSelected(it)) },
+            onSaveClick = { viewModel.onEventDispatcher(EditProfileContract.Intent.OnSaveClick) },
+            onBackClick = { viewModel.onEventDispatcher(EditProfileContract.Intent.OnBackClick) }
+        )
     }
 }
 
 @Composable
-fun EditProfileScreenContent() {
+fun EditProfileScreenContent(
+    isLoading: Boolean = false,
+    isSaving: Boolean = false,
+    isUploadingImage: Boolean = false,
+    username: String = "",
+    location: String = "",
+    bio: String = "",
+    gender: String = "Prefer not to say",
+    websiteUrl: String = "",
+    profileImageUri: Uri? = null,
+    avatarUrl: String? = null,
+    onUsernameChange: (String) -> Unit = {},
+    onLocationChange: (String) -> Unit = {},
+    onBioChange: (String) -> Unit = {},
+    onGenderChange: (String) -> Unit = {},
+    onWebsiteUrlChange: (String) -> Unit = {},
+    onProfileImageSelected: (Uri) -> Unit = {},
+    onSaveClick: () -> Unit = {},
+    onBackClick: () -> Unit = {}
+) {
     val navigator = LocalNavigator.currentOrThrow
     val scrollState = rememberScrollState()
     val context = LocalContext.current
     
-    var fullName by remember { mutableStateOf("") }
-    var username by remember { mutableStateOf("") }
-    var location by remember { mutableStateOf("") }
-    var bio by remember { mutableStateOf("") }
-    var selectedGender by remember { mutableStateOf("Prefer not to say") }
+    var localUsername by remember(username) { mutableStateOf(username) }
+    var localLocation by remember(location) { mutableStateOf(location) }
+    var localBio by remember(bio) { mutableStateOf(bio) }
+    var selectedGender by remember(gender) { mutableStateOf(gender) }
     var showGenderDropdown by remember { mutableStateOf(false) }
-    var profileImageUri by remember { mutableStateOf<Uri?>(null) }
+    var localProfileImageUri by remember(profileImageUri) { mutableStateOf(profileImageUri) }
     
     val genderOptions = listOf("Male", "Female", "Other", "Prefer not to say")
     
@@ -87,7 +148,8 @@ fun EditProfileScreenContent() {
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
         uri?.let {
-            profileImageUri = it
+            localProfileImageUri = it
+            onProfileImageSelected(it)
         }
     }
     
@@ -95,8 +157,8 @@ fun EditProfileScreenContent() {
     val cameraLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.TakePicture()
     ) { success ->
-        if (success) {
-            // Image already saved to profileImageUri
+        if (success && localProfileImageUri != null) {
+            onProfileImageSelected(localProfileImageUri!!)
         }
     }
     
@@ -112,7 +174,7 @@ fun EditProfileScreenContent() {
                 "${context.packageName}.fileprovider",
                 photoFile
             )
-            profileImageUri = uri
+            localProfileImageUri = uri
             cameraLauncher.launch(uri)
         } else {
             Toast.makeText(context, "Camera permission denied", Toast.LENGTH_SHORT).show()
@@ -129,7 +191,7 @@ fun EditProfileScreenContent() {
                     "${context.packageName}.fileprovider",
                     photoFile
                 )
-                profileImageUri = uri
+                localProfileImageUri = uri
                 cameraLauncher.launch(uri)
             }
             else -> {
@@ -162,7 +224,7 @@ fun EditProfileScreenContent() {
                 tint = Black,
                 modifier = Modifier
                     .size(24.dp)
-                    .clickable { navigator.pop() }
+                    .clickable { onBackClick() }
             )
             
             Spacer(modifier = Modifier.weight(1f))
@@ -176,8 +238,22 @@ fun EditProfileScreenContent() {
             
             Spacer(modifier = Modifier.weight(1f))
             
-            // Placeholder for symmetry
-            Spacer(modifier = Modifier.size(24.dp))
+            // Save button
+            if (isSaving) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(24.dp),
+                    color = MainColor,
+                    strokeWidth = 2.dp
+                )
+            } else {
+                TextUi(
+                    text = "Save",
+                    color = MainColor,
+                    fontSize = 16,
+                    fontFamily = R.font.inter_semibold,
+                    modifier = Modifier.clickable { onSaveClick() }
+                )
+            }
         }
         
         // Scrollable Content
@@ -205,14 +281,28 @@ fun EditProfileScreenContent() {
                         .clickable { openCamera() },
                     contentAlignment = Alignment.Center
                 ) {
-                    if (profileImageUri != null) {
+                    if (localProfileImageUri != null || avatarUrl != null) {
                         AsyncImage(
-                            model = profileImageUri,
+                            model = localProfileImageUri ?: avatarUrl,
                             contentDescription = "Profile Photo",
                             modifier = Modifier
                                 .fillMaxSize()
                                 .clip(CircleShape)
                         )
+                        if (isUploadingImage) {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .background(Color.Black.copy(alpha = 0.5f)),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                CircularProgressIndicator(
+                                    modifier = Modifier.size(24.dp),
+                                    color = Color.White,
+                                    strokeWidth = 2.dp
+                                )
+                            }
+                        }
                     } else {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_camera),
@@ -253,26 +343,16 @@ fun EditProfileScreenContent() {
             
             Spacer(modifier = Modifier.height(MaterialTheme.dimens.spacingExtraLarge))
             
-            // Full Name Field
-            TextFieldUi(
-                isModifier = true,
-                modifier = Modifier
-                    .fillMaxWidth(),
-                value = fullName,
-                onChangeValue = { fullName = it },
-                label = "Full Name",
-                cross = 1
-            )
-            
-            Spacer(modifier = Modifier.height(MaterialTheme.dimens.spacingSmall))
-            
             // Username Field
             TextFieldUi(
                 isModifier = true,
                 modifier = Modifier
                     .fillMaxWidth(),
-                value = username,
-                onChangeValue = { username = it },
+                value = localUsername,
+                onChangeValue = { 
+                    localUsername = it
+                    onUsernameChange(it)
+                },
                 label = "Username",
                 cross = 1
             )
@@ -284,8 +364,11 @@ fun EditProfileScreenContent() {
                 isModifier = true,
                 modifier = Modifier
                     .fillMaxWidth(),
-                value = location,
-                onChangeValue = { location = it },
+                value = localLocation,
+                onChangeValue = { 
+                    localLocation = it
+                    onLocationChange(it)
+                },
                 label = "Location",
                 cross = 1
             )
@@ -298,8 +381,11 @@ fun EditProfileScreenContent() {
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(120.dp),
-                value = bio,
-                onChangeValue = { bio = it },
+                value = localBio,
+                onChangeValue = { 
+                    localBio = it
+                    onBioChange(it)
+                },
                 label = "Bio",
                 cross = 1,
                 singleLine = false,
@@ -415,6 +501,7 @@ fun EditProfileScreenContent() {
                                         .clickable {
                                             selectedGender = gender
                                             showGenderDropdown = false
+                                            onGenderChange(gender)
                                         }
                                         .padding(MaterialTheme.dimens.paddingMedium),
                                     verticalAlignment = Alignment.CenterVertically

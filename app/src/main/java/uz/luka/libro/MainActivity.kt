@@ -20,6 +20,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import io.github.jan.supabase.createSupabaseClient
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import uz.luka.libro.data.local.UserSession
 import uz.luka.libro.presantation.screens.intro.IntroScreen
 import uz.luka.libro.presantation.screens.main.MainScreen
 import uz.luka.libro.presantation.screens.splash.SplashViewModel
@@ -31,18 +32,25 @@ import javax.inject.Inject
 class MainActivity : ComponentActivity() {
 
     private val splashViewModel by viewModels<SplashViewModel>()
+    
     @Inject
     lateinit var navigationHandler: NavigationHandler
+    
+    @Inject
+    lateinit var userSession: UserSession
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         installSplash()
 
-
         setContent {
             LibroTheme {
-                Navigator(screen = MainScreen()) { navigator ->
+                // User login qilganmi tekshirish
+                val isLoggedIn = userSession.userId != null
+                val startScreen = if (isLoggedIn) MainScreen() else IntroScreen()
+                
+                Navigator(screen = startScreen) { navigator ->
                     LaunchedEffect(key1 = navigator) {
                         navigationHandler.screenState.onEach { it.invoke(navigator) }
                             .launchIn(lifecycleScope)

@@ -12,7 +12,8 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val loginDirection: LoginDirection,
-    private val userProfileRepository: uz.luka.libro.domain.repository.UserProfileRepository
+    private val userProfileRepository: uz.luka.libro.domain.repository.UserProfileRepository,
+    private val userSession: uz.luka.libro.data.local.UserSession
 ) : LoginContract.ViewModel, ViewModel() {
 
     private val _uiState = MutableStateFlow(LoginContract.UiState())
@@ -60,9 +61,28 @@ class LoginViewModel @Inject constructor(
             
             when (val result = userProfileRepository.login(email, password)) {
                 is uz.luka.libro.domain.model.AuthResult.Success -> {
-                    println("✅ LIBRO: Login muvaffaqiyatli - User: ${result.data?.fullName}")
-                    _uiState.update { it.copy(isLoading = false) }
-                    loginDirection.moveToMain()
+                    val userProfile = result.data
+                    if (userProfile != null) {
+                        // User session ga saqlash
+                        userSession.saveUserSession(
+                            userId = userProfile.id ?: "",
+                            username = userProfile.username,
+                            email = userProfile.email,
+                            avatarUrl = userProfile.avatarUrl
+                        )
+                        
+                        println("✅ LIBRO: Login muvaffaqiyatli - User: ${userProfile.username}")
+                        _uiState.update { it.copy(isLoading = false) }
+                        loginDirection.moveToMain()
+                    } else {
+                        println("❌ LIBRO: User profil topilmadi")
+                        _uiState.update { 
+                            it.copy(
+                                isLoading = false,
+                                errorMessage = "User profil topilmadi"
+                            ) 
+                        }
+                    }
                 }
                 is uz.luka.libro.domain.model.AuthResult.Error -> {
                     println("❌ LIBRO: Login xatosi: ${result.message}")

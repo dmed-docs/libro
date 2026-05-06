@@ -45,7 +45,7 @@ class SignUpWithEmailViewModel @Inject constructor(
     }
     
     private fun signUpWithEmail() {
-        val email = _uiState.value.email
+        val email = _uiState.value.email.trim()
         
         // Email validatsiya
         if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
@@ -57,7 +57,7 @@ class SignUpWithEmailViewModel @Inject constructor(
             _uiState.update { it.copy(isLoading = true, errorMessage = null) }
             
             // Email mavjudligini tekshirish
-            when (val result = userProfileRepository.checkEmailOrUsernameExists(email)) {
+            when (val result = userProfileRepository.checkEmailExists(email)) {
                 is uz.luka.libro.domain.model.AuthResult.Success -> {
                     if (result.data == true) {
                         // Email allaqachon mavjud
@@ -72,7 +72,6 @@ class SignUpWithEmailViewModel @Inject constructor(
                     
                     // Email mavjud emas, davom etish mumkin
                     signUpDataHolder.email = email
-                    println("🔵 LIBRO: Email saqlandi: ${signUpDataHolder.email}")
                     
                     kotlinx.coroutines.delay(500)
                     _uiState.update { it.copy(isLoading = false) }
@@ -90,28 +89,6 @@ class SignUpWithEmailViewModel @Inject constructor(
                     _uiState.update { it.copy(isLoading = true) }
                 }
             }
-            
-            /* KEYINROQ YOQAMIZ:
-            val tempPassword = "TempPass123!"
-            
-            when (val result = authRepository.signUpWithEmail(email, tempPassword)) {
-                is AuthResult.Success -> {
-                    _uiState.update { it.copy(isLoading = false) }
-                    signUpDirection.moveToVerificationCode(email)
-                }
-                is AuthResult.Error -> {
-                    _uiState.update { 
-                        it.copy(
-                            isLoading = false, 
-                            errorMessage = result.message
-                        ) 
-                    }
-                }
-                is AuthResult.Loading -> {
-                    _uiState.update { it.copy(isLoading = true) }
-                }
-            }
-            */
         }
     }
 }

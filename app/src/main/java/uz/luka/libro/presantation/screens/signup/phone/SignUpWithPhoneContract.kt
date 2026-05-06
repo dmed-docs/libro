@@ -10,7 +10,7 @@ interface SignUpWithPhoneContract {
     }
 
     data class UiState(
-        val phoneNumber: String = "",
+        val phoneNumber: String = "+998",
         val errorMessage: String? = null,
         val isLoading: Boolean = false
     )
