@@ -18,7 +18,8 @@ import uz.luka.libro.ui.theme.MainColor
 @Composable
 fun ProfileButtonsUi(
     onEditProfileClick: () -> Unit = {},
-    onShareProfileClick: () -> Unit = {}
+    onShareProfileClick: () -> Unit = {},
+    onAddPeopleClick: () -> Unit = {}
 ) {
     Row (
         modifier = Modifier
@@ -57,7 +58,9 @@ fun ProfileButtonsUi(
             cornerRadius = 8 ,
             color = MainColor ,
             image = R.drawable.ic_add_people
-        )
+        ) {
+            onAddPeopleClick()
+        }
     }
 }
 

@@ -35,6 +35,7 @@ import uz.luka.libro.presantation.components.profile.ProfileAboutSavedUi
 import uz.luka.libro.presantation.components.profile.ProfileMainUi
 import uz.luka.libro.presantation.components.profile.ProfileTopContent
 import uz.luka.libro.presantation.screens.editprofile.EditProfileScreen
+import uz.luka.libro.presantation.screens.search.SearchUsersScreen
 import uz.luka.libro.presantation.screens.settings.SettingsScreen
 import uz.luka.libro.presantation.screens.shareprofile.ShareProfileScreen
 import uz.luka.libro.ui.theme.MainColor
@@ -73,6 +74,9 @@ class ProfileScreen : Screen {
                     ProfileContract.SideEffect.NavigateToSettings -> {
                         navigator.push(SettingsScreen())
                     }
+                    ProfileContract.SideEffect.NavigateToSearchUsers -> {
+                        navigator.push(SearchUsersScreen())
+                    }
                     ProfileContract.SideEffect.NavigateToLogin -> {
                         // TODO: Navigate to login screen
                         println("🔵 LIBRO: Navigate to login")
@@ -93,7 +97,8 @@ class ProfileScreen : Screen {
             errorMessage = uiState.errorMessage,
             onEditProfileClick = { viewModel.onEventDispatcher(ProfileContract.Intent.OnEditProfileClick) },
             onShareProfileClick = { viewModel.onEventDispatcher(ProfileContract.Intent.OnShareProfileClick) },
-            onMenuClick = { viewModel.onEventDispatcher(ProfileContract.Intent.OnSettingsClick) }
+            onMenuClick = { viewModel.onEventDispatcher(ProfileContract.Intent.OnSettingsClick) },
+            onAddPeopleClick = { viewModel.onEventDispatcher(ProfileContract.Intent.OnAddPeopleClick) }
         )
     }
 }
@@ -111,7 +116,8 @@ fun ProfileScreenContent(
     errorMessage: String? = null,
     onEditProfileClick: () -> Unit = {},
     onShareProfileClick: () -> Unit = {},
-    onMenuClick: () -> Unit = {}
+    onMenuClick: () -> Unit = {},
+    onAddPeopleClick: () -> Unit = {}
 ) {
     Box(
         modifier = Modifier
@@ -158,7 +164,8 @@ fun ProfileScreenContent(
                     followingCount = followingCount,
                     followersCount = followersCount,
                     onEditProfileClick = onEditProfileClick,
-                    onShareProfileClick = onShareProfileClick
+                    onShareProfileClick = onShareProfileClick,
+                    onAddPeopleClick = onAddPeopleClick
                 )
 
                 Spacer(modifier = Modifier.size(MaterialTheme.dimens.spacingTiny))

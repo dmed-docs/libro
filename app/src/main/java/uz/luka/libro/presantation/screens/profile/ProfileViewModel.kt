@@ -39,6 +39,7 @@ class ProfileViewModel @Inject constructor(
             ProfileContract.Intent.OnShareProfileClick -> navigateToShareProfile()
             ProfileContract.Intent.OnSettingsClick -> navigateToSettings()
             ProfileContract.Intent.OnLogoutClick -> logout()
+            ProfileContract.Intent.OnAddPeopleClick -> navigateToSearchUsers()
         }
     }
 
@@ -121,6 +122,12 @@ class ProfileViewModel @Inject constructor(
     private fun navigateToSettings() {
         viewModelScope.launch {
             _sideEffect.emit(ProfileContract.SideEffect.NavigateToSettings)
+        }
+    }
+
+    private fun navigateToSearchUsers() {
+        viewModelScope.launch {
+            _sideEffect.emit(ProfileContract.SideEffect.NavigateToSearchUsers)
         }
     }
 

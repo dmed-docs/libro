@@ -16,6 +16,7 @@ interface ProfileContract {
         data object OnShareProfileClick : Intent
         data object OnSettingsClick : Intent
         data object OnLogoutClick : Intent
+        data object OnAddPeopleClick : Intent
     }
     
     sealed interface SideEffect {
@@ -23,6 +24,7 @@ interface ProfileContract {
         data class NavigateToShareProfile(val username: String, val fullName: String) : SideEffect
         data object NavigateToSettings : SideEffect
         data object NavigateToLogin : SideEffect
+        data object NavigateToSearchUsers : SideEffect
     }
     
     interface ViewModel {

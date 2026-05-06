@@ -31,7 +31,8 @@ fun ProfileMainUi(
     followingCount: Int = 0,
     followersCount: Int = 0,
     onEditProfileClick: () -> Unit = {},
-    onShareProfileClick: () -> Unit = {}
+    onShareProfileClick: () -> Unit = {},
+    onAddPeopleClick: () -> Unit = {}
 ) {
     Column (
         modifier = Modifier
@@ -87,7 +88,8 @@ fun ProfileMainUi(
 
         ProfileButtonsUi(
             onEditProfileClick = onEditProfileClick,
-            onShareProfileClick = onShareProfileClick
+            onShareProfileClick = onShareProfileClick,
+            onAddPeopleClick = onAddPeopleClick
         )
     }
 }
